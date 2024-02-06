@@ -81,6 +81,60 @@ def LogIn():
         return 0
             
     
+#The fuction that is called after a successful login
+def Validlogin():
+    #Ask user options
+    print("1. Search for a Job.")
+    print("2. Find someone you know.")
+    print("3. Learn a new skill.")
+    loginoption = int(input("Select an option: "))
+
+    if (loginoption == 1):
+        print("under construction.")
+    elif (loginoption == 2):
+        print("under construction.")
+    elif (loginoption == 3):
+        skills()
+
+#Function that displays avaliable skills for the user to learn
+def skills():
+    #User options
+    print("Choose a skill you want to learn!")
+    print("1. Data analysis")
+    print("2. Web development")
+    print("3. Programming")
+    print("4. Cloud skill")
+    print("5. Git")
+    print("Press '0' to exit")
+
+    choice = int(input("Select a skill: "))
+
+    #Loop ensures the user enters a valid choice
+    while (choice < 0 and choice > 5):
+        print("Invalid choice")
+        print("Choose a skill you want to learn!")
+        print("1. Data analysis")
+        print("2. Web development")
+        print("3. Programming")
+        print("4. Cloud skill")
+        print("5. Git")
+        print("Press '0' to exit")
+        print(" ")
+
+        choice = input("Select a skill: ")
+
+    if (choice == 1):
+        print("under construction")
+    elif (choice == 2):
+        print("under construction")
+    elif (choice == 3):
+        print("under construction")
+    elif (choice == 4):
+        print("under construction")
+    elif (choice == 5):
+        print("under construction")
+    elif (choice == 0):
+        Validlogin()
 
 '''
 Main Function
@@ -109,10 +163,10 @@ while(userselect != 0):
     if(userselect == 2):
         if(LogIn()):
             userselect = 0 #If LogIn Process is successed, break out from loop
-        
+
 
 #After Login
-
+Validlogin()
                 
     
 
