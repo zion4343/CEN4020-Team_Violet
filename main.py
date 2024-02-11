@@ -29,7 +29,7 @@ while(userselect != 0):
 
 
     #If user select invalid option, ask to select again
-    while(userselect != 1 and userselect != 2):
+    while(userselect != 1 and userselect != 2 and userselect != 3):
         print("Invalid Input")
         print("1. Create new account")
         print("2. Login with existing account")
@@ -48,10 +48,20 @@ while(userselect != 0):
             
     #Show Success Story and Provide the option to see the video
     elif(userselect == 3):
+        #Show Success Story
         b_login.successStory()
         
-
-
+        #Ask whether user want to see video or not
+        print("Next, do you want to watch the video that explains why user should join in InCollege?")
+        watchVideo = int(input("If you want, enter 1, else enter 0: "))
+        #If user enter invalid input, ask again
+        while(watchVideo != 1 and watchVideo != 0):
+            watchVideo = int(input("Invalid Enter, please enter your option again (0 or 1): "))    
+        
+        if(watchVideo):
+            print("Video is now playing")
+            watchVideo = input("If do you want to quit, enter something: ")
+            print("\n")
 
 #After Login
 a_login.addOptions()    

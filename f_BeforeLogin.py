@@ -86,4 +86,10 @@ def LogIn():
     
 #The function that provide a student success story 
 def successStory():
-    return 0
+    #Tell the story
+    print("Maria Rodriguez was just another freshman at State University, navigating the labyrinth of college life. With dreams of a successful career in marketing, she knew she needed to seize every opportunity to gain experience and make connections. That's when she discovered InCollege, a powerful tool designed to bridge the gap between college and career.")
+    print("\nUpon creating her account, Maria wasted no time in optimizing her profile. She uploaded a professional photo, polished her resume, and highlighted her skills and experiences. With her profile complete, she began exploring the job search feature. Filtering by industry and location, she found a marketing internship at a local startup that seemed tailor-made for her aspirations.")
+    print("\nWith determination in her heart, Maria crafted a personalized cover letter and submitted her application through InCollege. Within days, she received an interview request. Armed with confidence and preparation, she aced the interview and landed the internship.")
+    print("\nBut Maria's journey didn't stop there. Through InCollege's networking feature, she connected with fellow students studying marketing at universities across the country. They shared insights, exchanged tips, and even collaborated on projects. This virtual community became her support system, providing guidance and encouragement every step of the way.")
+    print("\nAs Maria progressed through her college years, InCollege remained her trusted companion. She continued to explore job opportunities, attend virtual career fairs, and expand her professional network. By the time she graduated, Maria had secured a full-time position at a top marketing agency, thanks in large part to the connections she had made and the experiences she had gained through InCollege.")
+    print("\nToday, Maria looks back on her college journey with gratitude and pride. InCollege not only helped her transition from campus to career but also empowered her to realize her dreams. From a wide-eyed freshman to a successful marketing professional, Maria's story is a testament to the power of ambition, perseverance, and the right tools at the right time.\n")
