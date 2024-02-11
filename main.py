@@ -26,6 +26,7 @@ while(userselect != 0):
     print("2. Login with existing account")
     print("3. See a college student success story")
     userselect = int(input("Select your option: "))
+    print("\n")
 
 
     #If user select invalid option, ask to select again
@@ -35,10 +36,10 @@ while(userselect != 0):
         print("2. Login with existing account")
         print("3. See a college student success story")
         userselect = int(("Please select your option again (1 or 2 or 3): "))
-        
+        print("\n")
+
     #Create new account 
     if(userselect == 1):
-        print("\n")
         b_login.CreateNewAccount()
 
     #LogIn Process

@@ -16,7 +16,7 @@ MAX_PASSWORD_LENGTH = 12
 
 #The dictionary that store 5 unique student accounts
 #Name: Password
-account = {}
+accounts = {}
 usernameTrue = ""
 special_characters = "!@#$%^&*()-+?_=,<>/"
 loginStat = 0
@@ -29,15 +29,16 @@ Functions
 #Ask unique username and secure password: 
 #minimum of 8 characters, maximum of 12 characters, at least one capital letter, one digit, one special character
 def CreateNewAccount():
-    if(len(account) > MAX_ACCOUNTS):
+    if(len(accounts) > MAX_ACCOUNTS):
         print("All permitted accounts have been created, please come back later")
     else:
         #Ask Unique username
         while(1):
             username = input("Input your Username: ")
-            for i in account.keys():
+            for i in accounts.keys():
                 if(i == username):
                     print("Existing username")
+                    print("\n")
                     break
             else:
                 break
@@ -57,7 +58,7 @@ def CreateNewAccount():
             #Indentify the password is secure or not
             #Password Length
             if(len(password) < MIN_PASSWORD_LENGTH or len(password) > MAX_PASSWORD_LENGTH):
-                print("Invalid password!")
+                print("Invalid password")
                 print("\n")
                 continue
             
@@ -71,12 +72,14 @@ def CreateNewAccount():
                     hasSpecial = 1
             
             if(hasCapital and hasDigit and hasSpecial):
-                account[username] = password
+                accounts[username] = password
                 print("Your account created successful!")
+                print("\n")
                 writeDictonary()
                 return 1
             else:
                 print("Invalid password")
+                print("\n")
         
 
 #The function that log in with existing account
@@ -85,13 +88,15 @@ def LogIn():
     readDictonary()
     username = input("Input your Username: ")
     password = input("Input your Password: ")
-    for name, pw in account.items():
+    for name, pw in accounts.items():
         if(name == username):
             if(pw == password):
                 print("Login was successful!")
+                print("\n")
                 return 1
     else:
         print("Login was failed.")
+        print("\n")
         return 0
     
 #The function that provide a student success story 
@@ -105,9 +110,9 @@ def successStory():
     print("\nToday, Maria looks back on her college journey with gratitude and pride. InCollege not only helped her transition from campus to career but also empowered her to realize her dreams. From a wide-eyed freshman to a successful marketing professional, Maria's story is a testament to the power of ambition, perseverance, and the right tools at the right time.\n")
 
 def writeDictonary():
-    np.save("accounts.npy", account)
-    return 1
+    np.save("accounts.npy", accounts)
 
 def readDictonary():
-    account = np.load("accounts.npy", allow_picle = "TRUE")
-    return 1
+    py_dict = np.load("accounts.npy", allow_pickle = "TRUE")
+    global accounts
+    accounts = py_dict.item()
