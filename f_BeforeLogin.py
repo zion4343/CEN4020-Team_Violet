@@ -2,11 +2,19 @@
 The functions support Log-in Interface
 '''
 
+'''
+Import
+'''
+import numpy as np
+
+'''
+Pre-difined Variables
+'''
 MAX_ACCOUNTS = 5
 MIN_PASSWORD_LENGTH = 8
 MAX_PASSWORD_LENGTH = 12
 
-#The directionary that store 5 unique student accounts
+#The dictionary that store 5 unique student accounts
 #Name: Password
 account = {}
 usernameTrue = ""
@@ -65,6 +73,7 @@ def CreateNewAccount():
             if(hasCapital and hasDigit and hasSpecial):
                 account[username] = password
                 print("Your account created successful!")
+                writeDictonary()
                 return 1
             else:
                 print("Invalid password")
@@ -73,6 +82,7 @@ def CreateNewAccount():
 #The function that log in with existing account
 #When succeed LogIn return 1, else return 0
 def LogIn():
+    readDictonary()
     username = input("Input your Username: ")
     password = input("Input your Password: ")
     for name, pw in account.items():
@@ -93,3 +103,11 @@ def successStory():
     print("\nBut Maria's journey didn't stop there. Through InCollege's networking feature, she connected with fellow students studying marketing at universities across the country. They shared insights, exchanged tips, and even collaborated on projects. This virtual community became her support system, providing guidance and encouragement every step of the way.")
     print("\nAs Maria progressed through her college years, InCollege remained her trusted companion. She continued to explore job opportunities, attend virtual career fairs, and expand her professional network. By the time she graduated, Maria had secured a full-time position at a top marketing agency, thanks in large part to the connections she had made and the experiences she had gained through InCollege.")
     print("\nToday, Maria looks back on her college journey with gratitude and pride. InCollege not only helped her transition from campus to career but also empowered her to realize her dreams. From a wide-eyed freshman to a successful marketing professional, Maria's story is a testament to the power of ambition, perseverance, and the right tools at the right time.\n")
+
+def writeDictonary():
+    np.save("accounts.npy", account)
+    return 1
+
+def readDictonary():
+    account = np.load("accounts.npy", allow_picle = "TRUE")
+    return 1
