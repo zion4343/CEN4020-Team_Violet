@@ -29,6 +29,7 @@ Functions
 #Ask unique username and secure password: 
 #minimum of 8 characters, maximum of 12 characters, at least one capital letter, one digit, one special character
 def CreateNewAccount():
+    readDictonary()
     if(len(accounts) > MAX_ACCOUNTS):
         print("All permitted accounts have been created, please come back later")
     else:
