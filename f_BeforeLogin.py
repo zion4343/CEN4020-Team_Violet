@@ -17,13 +17,18 @@ MAX_PASSWORD_LENGTH = 12
 #The dictionary that store 5 unique student accounts
 #Name: Password
 accounts = {}
+accFullName = {}
 usernameTrue = ""
 special_characters = "!@#$%^&*()-+?_=,<>/"
 loginStat = 0
+flag = False
 
 """
 Functions
 """
+def flagUpdate(val):
+    global flag
+    flag = val
 
 #The function that create new unique account
 #Ask unique username and secure password: 
@@ -35,6 +40,51 @@ def CreateNewAccount():
     else:
         #Ask Unique username
         while(1):
+            #Stores users' name so they can be searched for by another user
+            firstName = input(str("Please enter your first name: "))
+            lastName = input(str("\nPlease enter your last name: "))
+            fullname = firstName + lastName
+
+            #Checks to make sure the full name is unique
+            for i in accFullName.keys():
+                if(i == fullname): #Checks to see if the first name and last name are a unique combination
+                    print("This name already exists for an account")
+                    print("\n")
+                    flagUpdate(True)
+                    break
+                    
+
+                else:
+                    break
+
+            #When name already exists in the system, user gets asked name again
+            if (flag == True):
+                while(flag == True):
+                    firstName = input(str("Please enter your first name: "))
+                    lastName = input(str("\nPlease enter your last name: "))
+                    fullname = firstName + lastName
+
+                    for i in accFullName.keys():
+                        if(i == fullname): #Checks to see if the first name and last name are a unique combination
+                            print("This name already exists for an account")
+                            print("\n")
+                            break
+                    
+
+                        else:
+                            flagUpdate(False)
+                            break
+            else:
+                #Moves on to making a username
+                print("")
+                
+                
+                
+
+            
+
+            
+            #Checks to make sure the username is unique
             username = input("Input your Username: ")
             for i in accounts.keys():
                 if(i == username):
@@ -43,6 +93,7 @@ def CreateNewAccount():
                     break
             else:
                 break
+            
         #Ask Secure password
         while(1):
             hasCapital = 0
@@ -74,6 +125,7 @@ def CreateNewAccount():
             
             if(hasCapital and hasDigit and hasSpecial):
                 accounts[username] = password
+                accFullName[fullname] = username #Saves the firstName and lastName as the key and the username as the value
                 print("Your account created successful!")
                 print("\n")
                 writeDictonary()
@@ -110,10 +162,38 @@ def successStory():
     print("\nAs Maria progressed through her college years, InCollege remained her trusted companion. She continued to explore job opportunities, attend virtual career fairs, and expand her professional network. By the time she graduated, Maria had secured a full-time position at a top marketing agency, thanks in large part to the connections she had made and the experiences she had gained through InCollege.")
     print("\nToday, Maria looks back on her college journey with gratitude and pride. InCollege not only helped her transition from campus to career but also empowered her to realize her dreams. From a wide-eyed freshman to a successful marketing professional, Maria's story is a testament to the power of ambition, perseverance, and the right tools at the right time.\n")
 
+
 def writeDictonary():
+    #Saves the username and the user full name to numpy files
     np.save("accounts.npy", accounts)
+    np.save("fullnames.npy", accFullName)
 
 def readDictonary():
+    # print(" ")
     py_dict = np.load("accounts.npy", allow_pickle = "TRUE")
+    py_dictFullName = np.load("fullnames.npy", allow_pickle = "TRUE")
+
     global accounts
+    global accFullName
+
     accounts = py_dict.item()
+    accFullName = py_dictFullName.item()
+
+
+#This function connects user with people that can help them
+def connectPeople():
+    readDictonary() #Puts the name values in accounts and accFullName dictionary
+    firstNameSearch = input(str("Please enter the first name of the person you are looking for: "))
+    lastNameSearch = input(str("\nNow please enter the last name of the person you are looking for: "))
+    fullNameSearch = firstNameSearch + lastNameSearch
+
+    if fullNameSearch in accFullName: #Searchs through names of registered users
+        print("It is: ", fullNameSearch)
+        print("\nThey are a part of the InCollege system \n") #If a match is found, it prints a message
+
+    else: #When no match is found
+        print("\nThey are not yet a part of the InCollege system yet \n")
+
+
+
+

@@ -25,17 +25,19 @@ while(userselect != 0):
     print("1. Create new account")
     print("2. Login with existing account")
     print("3. See a college student success story")
+    print("4. Connect with a registered member")
     userselect = int(input("Select your option: "))
     print("\n")
 
 
     #If user select invalid option, ask to select again
-    while(userselect != 1 and userselect != 2 and userselect != 3):
+    while(userselect != 1 and userselect != 2 and userselect != 3 and userselect != 4):
         print("Invalid Input")
         print("1. Create new account")
         print("2. Login with existing account")
         print("3. See a college student success story")
-        userselect = int(("Please select your option again (1 or 2 or 3): "))
+        print("4. Connect with a registered member")
+        userselect = int(("Please select your option again (1 or 2 or 3 or 4): "))
         print("\n")
 
     #Create new account 
@@ -63,6 +65,11 @@ while(userselect != 0):
             print("Video is now playing")
             watchVideo = input("If do you want to quit, enter something: ")
             print("\n")
+
+    #This allows the user to search for a person using their first and last name, in order to connect with them
+    elif(userselect == 4):
+        b_login.connectPeople()
+        continue
 
 #After Login
 a_login.addOptions()    

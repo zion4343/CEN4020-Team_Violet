@@ -9,4 +9,4 @@ account = {}
 
 b_login.writeDictonary()
 
-print("All Account was deleted!\n")
+print("All Accounts were deleted!\n")
