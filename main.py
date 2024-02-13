@@ -22,7 +22,7 @@ userselect = 1
 #Loop until user can login
 while(userselect != 0):
     #Ask user select
-    print("1. Create new account")
+    print("\n1. Create new account")
     print("2. Login with existing account")
     print("3. See a college student success story")
     print("4. Connect with a registered member")
@@ -68,11 +68,20 @@ while(userselect != 0):
 
     #This allows the user to search for a person using their first and last name, in order to connect with them
     elif(userselect == 4):
-        b_login.connectPeople()
+        userJoinNum = b_login.connectPeople()
+        #User wants to log in
+        if (userJoinNum == 1):
+            #If LogIn Process is succesful, break out from loop
+            if(b_login.LogIn()):
+             userselect = 0 
+
+        #User wants to sign up for an account
+        elif userJoinNum == 2:
+            b_login.CreateNewAccount()
         continue
 
 #After Login
-a_login.addOptions()    
+a_login.addOptions(b_login.username)    
 
                 
     
