@@ -85,6 +85,7 @@ def CreateNewAccount():
 
             
             #Checks to make sure the username is unique
+            global username
             username = input("Input your Username: ")
             for i in accounts.keys():
                 if(i == username):
@@ -139,6 +140,7 @@ def CreateNewAccount():
 #When succeed LogIn return 1, else return 0
 def LogIn():
     readDictonary()
+    global username
     username = input("Input your Username: ")
     password = input("Input your Password: ")
     for name, pw in accounts.items():
@@ -190,6 +192,16 @@ def connectPeople():
     if fullNameSearch in accFullName: #Searchs through names of registered users
         #print("It is: ", fullNameSearch)
         print("\nThey are a part of the InCollege system \n") #If a match is found, it prints a message
+        print("Follow {} {} and come be apart of the InCollege System! \n".format(firstNameSearch, lastNameSearch))
+        print("Please log in or sign up for an account \n")
+        
+        #User gets invited to join the InCollege System if contact is found
+        searchJoin = int(input("Please select 1 to log in or select 2 to sign up: "))
+
+        return searchJoin
+
+
+        
 
     else: #When no match is found
         print("\nThey are not yet a part of the InCollege system yet \n")

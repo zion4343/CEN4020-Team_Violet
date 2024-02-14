@@ -13,6 +13,7 @@ Functions
 
 #This function to gives additional options after login is successful
 def addOptions(username):
+    print("\n")
     print("Welcome! What would you like to do?")
     print("1. Search for a job/internship")
     print("2. Find someone you know")
@@ -36,6 +37,7 @@ def addOptions(username):
                 
         elif choiceJob == "2":            
             postJob(username)
+
     elif choice == "2":
         print("Find someone you know option is currently under construction.")
 
@@ -68,7 +70,7 @@ def addOptions(username):
         
         else:
             print("6. Returning to the previous level. . .")
-            addOptions()
+            addOptions(username)
 
     else:
         print("Invalid choice.")
@@ -77,6 +79,7 @@ def addOptions(username):
 
 # Function to post a job
 def postJob(username):
+    loadJobPostings()
     if len(jobPostings) >= 5:
         print("Maximum number of job postings reached.")
         return
