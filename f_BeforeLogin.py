@@ -188,7 +188,7 @@ def connectPeople():
     fullNameSearch = firstNameSearch + lastNameSearch
 
     if fullNameSearch in accFullName: #Searchs through names of registered users
-        print("It is: ", fullNameSearch)
+        #print("It is: ", fullNameSearch)
         print("\nThey are a part of the InCollege system \n") #If a match is found, it prints a message
 
     else: #When no match is found
