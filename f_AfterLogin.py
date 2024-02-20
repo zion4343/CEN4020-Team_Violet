@@ -18,7 +18,7 @@ def addOptions(username):
     print("1. Search for a job/internship")
     print("2. Find someone you know")
     print("3. Learn a new skill")
-
+    print("4. Guest Controls")
     choice = input("Enter your choice: ")
 
     if choice == "1":
@@ -71,7 +71,8 @@ def addOptions(username):
         else:
             print("6. Returning to the previous level. . .")
             addOptions(username)
-
+    elif choice == "4":
+        guestControls(username)
     else:
         print("Invalid choice.")
 
@@ -113,3 +114,55 @@ def loadJobPostings():
         jobPostings = np.load("job_postings.npy", allow_pickle=True)
     except FileNotFoundError:
         jobPostings = []
+
+# Dictionary to store user settings
+user_settings = {}
+
+# Function to load user settings
+def loadUserSettings():
+    global user_settings
+    try:
+        user_settings = np.load("user_settings.npy", allow_pickle=True).item()
+    except FileNotFoundError:
+        user_settings = {}
+
+# Call this function at the beginning of the main program
+loadUserSettings()
+
+# Function to toggle features on and off
+def toggleFeature(username, feature):
+    if username not in user_settings:
+        user_settings[username] = {"email": True, "sms": True, "targeted_advertising": True}
+
+    if user_settings[username][feature]:
+        user_settings[username][feature] = False
+        print(f"{feature.capitalize()} notifications have been turned off.")
+    else:
+        user_settings[username][feature] = True
+        print(f"{feature.capitalize()} notifications have been turned on.")
+
+    # Save the updated user settings
+    np.save("user_settings.npy", user_settings)
+
+        
+# Function to handle guest controls
+def guestControls(username):
+    print("\nGuest Controls:")
+    print("1. Email Notifications")
+    print("2. SMS Notifications")
+    print("3. Targeted Advertising")
+    print("4. Return to the previous level. . .")
+
+    choice = input("Enter your choice: ")
+
+    if choice == "1":
+        toggleFeature(username, "email")
+    elif choice == "2":
+        toggleFeature(username, "sms")
+    elif choice == "3":
+        toggleFeature(username, "targeted_advertising")
+    elif choice == "4":
+        addOptions(username)
+    else:
+        print("Invalid choice.")
+        guestControls(username)
