@@ -158,10 +158,13 @@ def guestControls(username):
 
     if choice == "1":
         toggleFeature(username, "email")
+        addOptions(username)
     elif choice == "2":
         toggleFeature(username, "sms")
+        addOptions(username)
     elif choice == "3":
         toggleFeature(username, "targeted_advertising")
+        addOptions(username)
     elif choice == "4":
         addOptions(username)
     else:

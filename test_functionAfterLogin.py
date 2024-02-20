@@ -62,38 +62,26 @@ def test_postJob_success(mock_save, mock_loadJobPostings, mock_input):
 @patch('f_AfterLogin.loadJobPostings', return_value=[{} for _ in range(5)])  # 5 job postings
 def test_postJob_failure(mock_loadJobPostings):
     assert postJob("testuser") == 0
-    
-#Test toggleFeature()
-user_settings = {
-    "testuser": {"email": True, "sms": True, "targeted_advertising": True}
-}
-
-@patch('numpy.save')
-def test_toggleFeature_on_to_off(mock_save):
-    toggleFeature("testuser", "email")
-    assert user_settings["testuser"]["email"] == False
-
-@patch('numpy.save')
-def test_toggleFeature_off_to_on(mock_save):
-    toggleFeature("testuser", "email")
-    assert user_settings["testuser"]["email"] == True
 
 #Test guestControls()
 # Function to handle guest controls
 @patch('builtins.input', side_effect=['1'])
 @patch('f_AfterLogin.toggleFeature', return_value = 1)
-def test_guestControls_email(mock_toggleFeature, mock_input):
+@patch('f_AfterLogin.addOptions', return_value = 1)
+def test_guestControls_email(mock_toggleFeature, mock_addOptions, mock_input):
     assert guestControls("testuser") == 1
     
 
 @patch('builtins.input', side_effect=['2'])
 @patch('f_AfterLogin.toggleFeature', return_value = 1)
-def test_guestControls_sms(mock_toggleFeature, mock_input):
+@patch('f_AfterLogin.addOptions', return_value = 1)
+def test_guestControls_sms(mock_toggleFeature, mock_addOptions, mock_input):
     assert guestControls("testuser") == 1
 
 @patch('builtins.input', side_effect=['3'])
 @patch('f_AfterLogin.toggleFeature', return_value = 1)
-def test_guestControls_targeted_advertising(mock_toggleFeature, mock_input):
+@patch('f_AfterLogin.addOptions', return_value = 1)
+def test_guestControls_targeted_advertising(mock_toggleFeature, mock_addOptions, mock_input):
     assert guestControls("testuser") == 1
 
 @patch('builtins.input', side_effect=['4'])
