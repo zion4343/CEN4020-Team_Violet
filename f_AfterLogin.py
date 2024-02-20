@@ -83,7 +83,7 @@ def postJob(username):
     loadJobPostings()
     if len(jobPostings) >= 5:
         print("Maximum number of job postings reached.")
-        return
+        return 0
 
     print("Posting a job:")
     title = input("Enter job title: ")
@@ -106,6 +106,8 @@ def postJob(username):
 
     # Save the updated job postings
     np.save("job_postings.npy", jobPostings)
+    
+    return 1
 
 # Load job postings
 def loadJobPostings():

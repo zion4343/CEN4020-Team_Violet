@@ -37,6 +37,7 @@ def CreateNewAccount():
     readDictonary()
     if(len(accounts) >= MAX_ACCOUNTS):
         print("All permitted accounts have been created, please come back later")
+        return 0
     else:
         #Ask Unique username
         while(1):
@@ -78,12 +79,7 @@ def CreateNewAccount():
                 #Moves on to making a username
                 print("")
                 
-                
-                
-
-            
-
-            
+             
             #Checks to make sure the username is unique
             global username
             username = input("Input your Username: ")
@@ -163,12 +159,14 @@ def successStory():
     print("\nBut Maria's journey didn't stop there. Through InCollege's networking feature, she connected with fellow students studying marketing at universities across the country. They shared insights, exchanged tips, and even collaborated on projects. This virtual community became her support system, providing guidance and encouragement every step of the way.")
     print("\nAs Maria progressed through her college years, InCollege remained her trusted companion. She continued to explore job opportunities, attend virtual career fairs, and expand her professional network. By the time she graduated, Maria had secured a full-time position at a top marketing agency, thanks in large part to the connections she had made and the experiences she had gained through InCollege.")
     print("\nToday, Maria looks back on her college journey with gratitude and pride. InCollege not only helped her transition from campus to career but also empowered her to realize her dreams. From a wide-eyed freshman to a successful marketing professional, Maria's story is a testament to the power of ambition, perseverance, and the right tools at the right time.\n")
+    return 1
 
 
 def writeDictonary():
     #Saves the username and the user full name to numpy files
     np.save("accounts.npy", accounts)
     np.save("fullnames.npy", accFullName)
+    return 1
 
 def readDictonary():
     # print(" ")
@@ -180,6 +178,7 @@ def readDictonary():
 
     accounts = py_dict.item()
     accFullName = py_dictFullName.item()
+    return 1
 
 
 #This function connects user with people that can help them
@@ -205,6 +204,7 @@ def connectPeople():
 
     else: #When no match is found
         print("\nThey are not yet a part of the InCollege system yet \n")
+        return 1
 
 
 
