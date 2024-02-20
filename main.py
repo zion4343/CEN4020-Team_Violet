@@ -61,7 +61,11 @@ def handle_general_link_selection(selection):
             #LogIn Process
             elif(userselect == 2):
                 if(b_login.LogIn()):
+
+                    ###This part shows a bug in code since the while loop is no longer running on the condition of userselect.
+                    ###Other instances need to be fixed
                     userselect = 0 #If LogIn Process is succesful, break out from loop
+                    break
                     
             #Show Success Story and Provide the option to see the video
             elif(userselect == 3):
@@ -102,6 +106,10 @@ def handle_general_link_selection(selection):
         print("InCollege Pressroom: Stay on top of the latest news, updates, and reports")
     elif selection in range(5, 8):
         print("Under construction")
+
+    #Checking if it's because it is supposed to be selection instead of userselect
+    a_login.addOptions(b_login.username)    
+
 
 def inputValidation(prompt, valid_options):
     while True:
