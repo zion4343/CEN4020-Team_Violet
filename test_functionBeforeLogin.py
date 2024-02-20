@@ -14,6 +14,13 @@ from f_BeforeLogin import CreateNewAccount, LogIn, successStory, connectPeople
 def test_CreateNewAccount(mock_readDictonary, mock_writeDictonary, mock_input):
     assert CreateNewAccount() == 1
     
+#Invalid Password
+@patch('builtins.input', side_effect=['Joe', 'Doe', 'joedoe', 'invalid123', 'Password123!'])
+@patch('f_BeforeLogin.readDictonary', return_value=None)
+@patch('f_BeforeLogin.writeDictonary', return_value=None)
+def test_CreateInvalidAccount(mock_readDictonary, mock_writeDictonary, mock_input):
+    assert CreateNewAccount() == 1
+    
 #Test LogIn()
 @patch('builtins.input', side_effect=['johndoe', 'Password123!'])
 @patch('f_BeforeLogin.readDictonary', return_value={'johndoe': 'Password123!'})
