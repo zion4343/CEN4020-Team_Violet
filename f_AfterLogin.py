@@ -128,8 +128,6 @@ def loadUserSettings():
     except FileNotFoundError:
         user_settings = {}
 
-# Call this function at the beginning of the main program
-loadUserSettings()
 
 # Function to toggle features on and off
 def toggleFeature(username, feature):
@@ -145,6 +143,7 @@ def toggleFeature(username, feature):
 
     # Save the updated user settings
     np.save("user_settings.npy", user_settings)
+    return 1
 
         
 # Function to handle guest controls
@@ -168,3 +167,4 @@ def guestControls(username):
     else:
         print("Invalid choice.")
         guestControls(username)
+    return 1
