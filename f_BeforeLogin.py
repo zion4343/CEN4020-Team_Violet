@@ -29,6 +29,7 @@ Functions
 def flagUpdate(val):
     global flag
     flag = val
+    return 1
 
 #The function that create new unique account
 #Ask unique username and secure password: 
