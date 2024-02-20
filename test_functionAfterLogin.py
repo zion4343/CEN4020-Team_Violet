@@ -64,6 +64,19 @@ def test_postJob_failure(mock_loadJobPostings):
     assert postJob("testuser") == 0
     
 #Test toggleFeature()
+user_settings = {
+    "testuser": {"email": True, "sms": True, "targeted_advertising": True}
+}
+
+@patch('numpy.save')
+def test_toggleFeature_on_to_off(mock_save):
+    toggleFeature("testuser", "email")
+    assert user_settings["testuser"]["email"] == False
+
+@patch('numpy.save')
+def test_toggleFeature_off_to_on(mock_save):
+    toggleFeature("testuser", "email")
+    assert user_settings["testuser"]["email"] == True
 
 #Test guestControls()
 # Function to handle guest controls
