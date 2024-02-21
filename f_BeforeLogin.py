@@ -26,10 +26,20 @@ flag = False
 """
 Functions
 """
+
+#Updates flag variable
 def flagUpdate(val):
     global flag
     flag = val
     return 1
+
+
+#Function to display file content
+def getFile(filename):
+    with open(filename, 'r') as file:
+        content = file.read()
+    print(content)
+
 
 #The function that create new unique account
 #Ask unique username and secure password: 
@@ -246,7 +256,35 @@ def userImportantExit(userChoice):
         return 0
     
 
-        
+#Names the files to be printed according to user selection
+def returnFilename(number):
+    if number == 1:
+        file = "Copyright_Notice.txt"
+    
+    elif number == 2:
+        file = "About.txt"
+
+    elif number == 3:
+        file = "About.txt"
+
+    elif number == 4:
+        file = "User_Agreement.txt"
+
+    elif number == 5:
+        file = "Privacy_Policy.txt"
+
+    elif number == 6:
+        file = "Cookie_Policy.txt"
+    
+    elif number == 7:
+        file = "Copyright_Policy.txt"
+
+    elif number == 8:
+        file = "Brand_Policy.txt"
+
+    return file
+
+
 #Takes the selection of user in main.py and if it is 5 (Important Links, then it displays the Important Links menu)
 def handleImportantLinks():
 
@@ -259,14 +297,21 @@ def handleImportantLinks():
 
     #Displays the content for every option chosen
     if importantLinkChoice == 1:
+
+        
         print("\nCopyright Notice\n")
+        filename = returnFilename(importantLinkChoice)
+        getFile(filename)
         
         #Gives user the chance to go back up a level in the menu or exit entirely
         userImportantReturn = int(input("Press 1 to return to previous menu or press 2 to exit entirely: "))
         userImportantExit(userImportantReturn)
 
     elif importantLinkChoice == 2:
+        
         print("\nAbout\n")
+        filename = returnFilename(importantLinkChoice)
+        getFile(filename)
         
         #Gives user the chance to go back up a level in the menu or exit entirely
         userImportantReturn = int(input("Press 1 to return to previous menu or press 2 to exit entirely: "))
@@ -274,6 +319,8 @@ def handleImportantLinks():
 
     elif importantLinkChoice == 3:
         print("\nAccessibility\n")
+        filename = returnFilename(importantLinkChoice)
+        getFile(filename)
         
         #Gives user the chance to go back up a level in the menu or exit entirely
         userImportantReturn = int(input("Press 1 to return to previous menu or press 2 to exit entirely: "))
@@ -281,6 +328,8 @@ def handleImportantLinks():
 
     elif importantLinkChoice == 4:
         print("\nUser Agreement\n")
+        filename = returnFilename(importantLinkChoice)
+        getFile(filename)
         
         #Gives user the chance to go back up a level in the menu or exit entirely
         userImportantReturn = int(input("Press 1 to return to previous menu or press 2 to exit entirely: "))
@@ -288,6 +337,8 @@ def handleImportantLinks():
 
     elif importantLinkChoice == 5:
         print("\nPrivacy Policy\n")
+        filename = returnFilename(importantLinkChoice)
+        getFile(filename)
         
         #Gives user the chance to go back up a level in the menu or exit entirely
         userImportantReturn = int(input("Press 1 to return to previous menu or press 2 to exit entirely: "))
@@ -295,6 +346,8 @@ def handleImportantLinks():
 
     elif importantLinkChoice == 6:
         print("\nCookie Policy\n")
+        filename = returnFilename(importantLinkChoice)
+        getFile(filename)
         
         #Gives user the chance to go back up a level in the menu or exit entirely
         userImportantReturn = int(input("Press 1 to return to previous menu or press 2 to exit entirely: "))
@@ -302,6 +355,8 @@ def handleImportantLinks():
 
     elif importantLinkChoice == 7:
         print("\nCopyright Policy\n")
+        filename = returnFilename(importantLinkChoice)
+        getFile(filename)
         
         #Gives user the chance to go back up a level in the menu or exit entirely
         userImportantReturn = int(input("Press 1 to return to previous menu or press 2 to exit entirely: "))
@@ -309,6 +364,8 @@ def handleImportantLinks():
 
     elif importantLinkChoice == 8:
         print("\nBrand Policy\n")
+        filename = returnFilename(importantLinkChoice)
+        getFile(filename)
         
         #Gives user the chance to go back up a level in the menu or exit entirely
         userImportantReturn = int(input("Press 1 to return to previous menu or press 2 to exit entirely: "))
@@ -316,6 +373,7 @@ def handleImportantLinks():
 
     elif importantLinkChoice == 9:
         print("\nGuest Controls\n")
+        
         
         #Gives user the chance to go back up a level in the menu or exit entirely
         userImportantReturn = int(input("Press 1 to return to previous menu or press 2 to exit entirely: "))
