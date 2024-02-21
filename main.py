@@ -18,6 +18,7 @@ def displayLinks():
     print("2. Browse InCollege")
     print("3. Business Solutions")
     print("4. Directories")
+    print("5. InCollege Important Links")
     print("0. Exit")
 
 #displays all the general links (if 1 is chosen)
@@ -31,6 +32,9 @@ def displayGeneralLinks():
     print("6. Careers")
     print("7. Developers")
     print("0. Back")
+
+
+
 
 #Choosing general
 def handle_general_link_selection(selection):
@@ -65,7 +69,11 @@ def handle_general_link_selection(selection):
                     ###This part shows a bug in code since the while loop is no longer running on the condition of userselect.
                     ###Other instances need to be fixed
                     userselect = 0 #If LogIn Process is succesful, break out from loop
-                    a_login.addOptions(b_login.username)
+                    
+                    #LOGS USER IN
+                    a_login.addOptions(b_login.username) 
+
+                    #a_login.addOptions(b_login.username)
                     break
                     
             #Show Success Story and Provide the option to see the video
@@ -105,20 +113,21 @@ def handle_general_link_selection(selection):
         print("InCollege: Welcome to InCollege, the world's largest college student network with many users in many countries and territories worldwide")
     elif selection == 4:
         print("InCollege Pressroom: Stay on top of the latest news, updates, and reports")
+
     elif selection in range(5, 8):
         print("Under construction")
 
 
 
-def inputValidation(prompt, valid_options):
-    while True:
-        try:
-            user_input = int(input(prompt))
-            if user_input in valid_options:
-                return user_input
-            print("Invalid input. Please try again.")
-        except ValueError:
-            print("Invalid input. Please enter a number.")
+# def inputValidation(prompt, valid_options):
+#     while True:
+#         try:
+#             user_input = int(input(prompt))
+#             if user_input in valid_options:
+#                 return user_input
+#             print("Invalid input. Please try again.")
+#         except ValueError:
+#             print("Invalid input. Please enter a number.")
 
 '''
 Main Function
@@ -130,18 +139,31 @@ print("Welcome to InCollege")
 
 while True:
     displayLinks()
-    userselect = inputValidation("Select your options: ", [0,1,2,3,4])
+    userselect = b_login.inputValidation("Select your options: ", [0,1,2,3,4,5])
 
     if userselect == 0:
         print("Exiting...")
         break
     elif userselect == 1:
         displayGeneralLinks()
-        general_selection = inputValidation("Select an option: ", list(range(8)))
+        general_selection = b_login.inputValidation("Select an option: ", list(range(8)))
         if general_selection == 0:
             continue
         handle_general_link_selection(general_selection)
         break
+
+    #When Important InCollege Links gets chosen
+    elif userselect == 5:
+        goingBack = b_login.handleImportantLinks()
+
+        #Checks if the user wants to come back to main screen after clicking InCollege Important Links
+        if goingBack == 0:
+            continue
+        else:
+            break
+
+
+
     else:
         print("Under construction")   
         break
