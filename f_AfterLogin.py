@@ -18,8 +18,7 @@ def addOptions(username):
     print("1. Search for a job/internship")
     print("2. Find someone you know")
     print("3. Learn a new skill")
-    print("4. Guest Controls")
-    print ("5. InCollege Important Links")
+    print("4. InCollege Important Links")
     choice = input("Enter your choice: ")
 
     if choice == "1":
@@ -72,11 +71,12 @@ def addOptions(username):
         else:
             print("6. Returning to the previous level. . .")
             addOptions(username)
-    elif choice == "4":
-        guestControls(username)
 
-    elif choice == "5":
-        goingBackLoggedIn = handleImportantLinks()
+    # elif choice == "4":
+    #     guestControls(username)
+
+    elif choice == "4":
+        goingBackLoggedIn = handleImportantLinks(username)
 
         #Checks if the user wants to come back to main screen after clicking InCollege Important Links
         if goingBackLoggedIn == 0:
@@ -224,9 +224,9 @@ def displayImportantLinks():
 
 
  #Gives user the chance to go back up a level in the menu or exit entirely#
-def userImportantExit(userChoice):
+def userImportantExit(userChoice, username):
     if userChoice == 1:
-        handleImportantLinks()
+        handleImportantLinks(username)
         
     else:
         return 0
@@ -271,7 +271,7 @@ def getFile(filename):
 
 
 #Takes the selection of user in main.py and if it is 5 (Important Links, then it displays the Important Links menu)
-def handleImportantLinks():
+def handleImportantLinks(username):
 
     #This is to display the InCollege Important Links before the user is logged in 
     displayImportantLinks()
@@ -290,7 +290,7 @@ def handleImportantLinks():
         
         #Gives user the chance to go back up a level in the menu or exit entirely
         userImportantReturn = int(input("Press 1 to return to previous menu or press 2 to exit entirely: "))
-        userImportantExit(userImportantReturn)
+        userImportantExit(userImportantReturn, username)
 
     elif importantLinkChoice == 2:
         
@@ -300,7 +300,7 @@ def handleImportantLinks():
         
         #Gives user the chance to go back up a level in the menu or exit entirely
         userImportantReturn = int(input("Press 1 to return to previous menu or press 2 to exit entirely: "))
-        userImportantExit(userImportantReturn)
+        userImportantExit(userImportantReturn, username)
 
     elif importantLinkChoice == 3:
         print("\nAccessibility\n")
@@ -309,7 +309,7 @@ def handleImportantLinks():
         
         #Gives user the chance to go back up a level in the menu or exit entirely
         userImportantReturn = int(input("Press 1 to return to previous menu or press 2 to exit entirely: "))
-        userImportantExit(userImportantReturn)
+        userImportantExit(userImportantReturn, username)
 
     elif importantLinkChoice == 4:
         print("\nUser Agreement\n")
@@ -318,7 +318,7 @@ def handleImportantLinks():
         
         #Gives user the chance to go back up a level in the menu or exit entirely
         userImportantReturn = int(input("Press 1 to return to previous menu or press 2 to exit entirely: "))
-        userImportantExit(userImportantReturn)
+        userImportantExit(userImportantReturn, username)
 
     elif importantLinkChoice == 5:
         print("\nPrivacy Policy\n")
@@ -327,7 +327,7 @@ def handleImportantLinks():
         
         #Gives user the chance to go back up a level in the menu or exit entirely
         userImportantReturn = int(input("Press 1 to return to previous menu or press 2 to exit entirely: "))
-        userImportantExit(userImportantReturn)
+        userImportantExit(userImportantReturn, username)
 
     elif importantLinkChoice == 6:
         print("\nCookie Policy\n")
@@ -336,7 +336,7 @@ def handleImportantLinks():
         
         #Gives user the chance to go back up a level in the menu or exit entirely
         userImportantReturn = int(input("Press 1 to return to previous menu or press 2 to exit entirely: "))
-        userImportantExit(userImportantReturn)
+        userImportantExit(userImportantReturn, username)
 
     elif importantLinkChoice == 7:
         print("\nCopyright Policy\n")
@@ -345,7 +345,7 @@ def handleImportantLinks():
         
         #Gives user the chance to go back up a level in the menu or exit entirely
         userImportantReturn = int(input("Press 1 to return to previous menu or press 2 to exit entirely: "))
-        userImportantExit(userImportantReturn)
+        userImportantExit(userImportantReturn, username)
 
     elif importantLinkChoice == 8:
         print("\nBrand Policy\n")
@@ -354,22 +354,23 @@ def handleImportantLinks():
         
         #Gives user the chance to go back up a level in the menu or exit entirely
         userImportantReturn = int(input("Press 1 to return to previous menu or press 2 to exit entirely: "))
-        userImportantExit(userImportantReturn)
+        userImportantExit(userImportantReturn, username)
 
     elif importantLinkChoice == 9:
         print("\nGuest Controls\n")
+        guestControls(username)
         
         
         #Gives user the chance to go back up a level in the menu or exit entirely
         userImportantReturn = int(input("Press 1 to return to previous menu or press 2 to exit entirely: "))
-        userImportantExit(userImportantReturn)
+        userImportantExit(userImportantReturn, username)
 
     elif importantLinkChoice == 10:
         print("\nLanguages\n")
         
         #Gives user the chance to go back up a level in the menu or exit entirely
         userImportantReturn = int(input("Press 1 to return to previous menu or press 2 to exit entirely: "))
-        userImportantExit(userImportantReturn)
+        userImportantExit(userImportantReturn, username)
 
     elif importantLinkChoice == 0:
         return 0
