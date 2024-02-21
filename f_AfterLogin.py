@@ -80,7 +80,7 @@ def addOptions(username):
 
 # Function to post a job
 def postJob(username):
-    loadJobPostings()
+    jobPostings = loadJobPostings()
     if len(jobPostings) >= 5:
         print("Maximum number of job postings reached.")
         return 0
@@ -101,7 +101,11 @@ def postJob(username):
         "posted_by": username
     }
 
-    jobPostings.append(job)
+  
+
+    job = np.array(job)  #Converts job to a numpy array 
+    jobPostings = np.concatenate((jobPostings, np.expand_dims(job, axis=0)), axis=0) #Concatenates job array
+
     print("Job posted successfully.")
 
     # Save the updated job postings
@@ -116,6 +120,8 @@ def loadJobPostings():
         jobPostings = np.load("job_postings.npy", allow_pickle=True)
     except FileNotFoundError:
         jobPostings = []
+
+    return jobPostings
 
 # Dictionary to store user settings
 user_settings = {}
