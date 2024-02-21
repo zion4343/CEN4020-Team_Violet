@@ -154,8 +154,13 @@ while True:
 
     #When Important InCollege Links gets chosen
     elif userselect == 5:
-        b_login.handleImportantLinks()
-        break
+        goingBack = b_login.handleImportantLinks()
+
+        #Checks if the user wants to come back to main screen after clicking InCollege Important Links
+        if goingBack == 0:
+            continue
+        else:
+            break
 
 
 
