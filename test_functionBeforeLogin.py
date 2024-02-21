@@ -5,7 +5,7 @@ Test Script to test the functions in f_BeforeLogin.py
 import pytest
 import numpy as np
 from unittest.mock import patch
-from f_BeforeLogin import CreateNewAccount, LogIn, successStory, connectPeople
+from f_BeforeLogin import CreateNewAccount, LogIn, successStory, connectPeople, handleImportantLinks
 
 #Test CreateNewAccount()
 @patch('builtins.input', side_effect=['John', 'Doe', 'johndoe', 'Password123!'])
@@ -36,3 +36,12 @@ def test_successStory():
 @patch('f_BeforeLogin.readDictonary', return_value={'JohnDoe': 'Password123!'})
 def test_connectPeople(mock_readDictonary, mock_input):
     assert connectPeople() == 1
+    
+#Test handleImportantLinks()
+@patch('builtins.input', side_effect=['1', '1', '1', '2'])
+def test_handleImportantLinks(mock_input):
+    assert handleImportantLinks() == 0
+    
+@patch('builtins.input', side_effect=['1', '2'])
+def test_handleImportantLinks_Quit(mock_input):
+    assert handleImportantLinks() == 0
