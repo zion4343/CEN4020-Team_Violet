@@ -92,5 +92,6 @@ def test_guestControls_return_previous_level(mock_toggleFeature, mock_addOptions
 
 @patch('builtins.input', side_effect=['5', '1'])
 @patch('f_AfterLogin.toggleFeature', return_value = 1)
-def test_guestControls_invalid_choice(mock_toggleFeature, mock_input):
+@patch('f_AfterLogin.addOptions', return_value = 1)
+def test_guestControls_invalid_choice(mock_toggleFeature, mock_addOptions, mock_input):
     assert guestControls("testuser") == 1
