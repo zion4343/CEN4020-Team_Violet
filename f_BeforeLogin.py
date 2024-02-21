@@ -6,6 +6,7 @@ The functions support Log-in Interface
 Import
 '''
 import numpy as np
+import os
 
 '''
 Pre-difined Variables
@@ -387,7 +388,9 @@ def handleImportantLinks():
         userImportantExit(userImportantReturn)
 
     elif importantLinkChoice == 0:
-        back = 1
+        return 0
+
+   
     
     return back
         
