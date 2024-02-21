@@ -235,11 +235,24 @@ def displayImportantLinks():
     print("10. Languages")
     print("0. Back")
 
+
+
+ #Gives user the chance to go back up a level in the menu or exit entirely#
+def userImportantExit(userChoice):
+    if userChoice == 1:
+        handleImportantLinks()
+        
+    else:
+        return 0
+    
+
+        
 #Takes the selection of user in main.py and if it is 5 (Important Links, then it displays the Important Links menu)
 def handleImportantLinks():
 
     #This is to display the InCollege Important Links before the user is logged in 
     displayImportantLinks()
+    back = 0
 
     #User chooses between 0 and 10 for various options
     importantLinkChoice = inputValidation("\n\nPlease select the number corresponding to your choice: ", list(range(11)))
@@ -250,12 +263,85 @@ def handleImportantLinks():
         
         #Gives user the chance to go back up a level in the menu or exit entirely
         userImportantReturn = int(input("Press 1 to return to previous menu or press 2 to exit entirely: "))
+        userImportantExit(userImportantReturn)
 
-        if userImportantReturn == 1:
-            handleImportantLinks()
+    elif importantLinkChoice == 2:
+        print("\nAbout\n")
         
-        else:
-            return 0
+        #Gives user the chance to go back up a level in the menu or exit entirely
+        userImportantReturn = int(input("Press 1 to return to previous menu or press 2 to exit entirely: "))
+        userImportantExit(userImportantReturn)
+
+    elif importantLinkChoice == 3:
+        print("\nAccessibility\n")
         
+        #Gives user the chance to go back up a level in the menu or exit entirely
+        userImportantReturn = int(input("Press 1 to return to previous menu or press 2 to exit entirely: "))
+        userImportantExit(userImportantReturn)
+
+    elif importantLinkChoice == 4:
+        print("\nUser Agreement\n")
+        
+        #Gives user the chance to go back up a level in the menu or exit entirely
+        userImportantReturn = int(input("Press 1 to return to previous menu or press 2 to exit entirely: "))
+        userImportantExit(userImportantReturn)
+
+    elif importantLinkChoice == 5:
+        print("\nPrivacy Policy\n")
+        
+        #Gives user the chance to go back up a level in the menu or exit entirely
+        userImportantReturn = int(input("Press 1 to return to previous menu or press 2 to exit entirely: "))
+        userImportantExit(userImportantReturn)
+
+    elif importantLinkChoice == 6:
+        print("\nCookie Policy\n")
+        
+        #Gives user the chance to go back up a level in the menu or exit entirely
+        userImportantReturn = int(input("Press 1 to return to previous menu or press 2 to exit entirely: "))
+        userImportantExit(userImportantReturn)
+
+    elif importantLinkChoice == 7:
+        print("\nCopyright Policy\n")
+        
+        #Gives user the chance to go back up a level in the menu or exit entirely
+        userImportantReturn = int(input("Press 1 to return to previous menu or press 2 to exit entirely: "))
+        userImportantExit(userImportantReturn)
+
+    elif importantLinkChoice == 8:
+        print("\nBrand Policy\n")
+        
+        #Gives user the chance to go back up a level in the menu or exit entirely
+        userImportantReturn = int(input("Press 1 to return to previous menu or press 2 to exit entirely: "))
+        userImportantExit(userImportantReturn)
+
+    elif importantLinkChoice == 9:
+        print("\nGuest Controls\n")
+        
+        #Gives user the chance to go back up a level in the menu or exit entirely
+        userImportantReturn = int(input("Press 1 to return to previous menu or press 2 to exit entirely: "))
+        userImportantExit(userImportantReturn)
+
+    elif importantLinkChoice == 10:
+        print("\nLanguages\n")
+        
+        #Gives user the chance to go back up a level in the menu or exit entirely
+        userImportantReturn = int(input("Press 1 to return to previous menu or press 2 to exit entirely: "))
+        userImportantExit(userImportantReturn)
+
+    elif importantLinkChoice == 0:
+        back = 1
+    
+    return back
+        
+
+
+
+    
+
+
+
+
+
+ 
         
 
