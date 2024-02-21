@@ -43,9 +43,9 @@ def test_addOptions_learn_data_analysis(mock_input):
 def test_addOptions_learn_language_learning(mock_input):
     assert addOptions("testuser") == 1
 
-@patch('builtins.input', side_effect=['4'])
-@patch('f_AfterLogin.guestControls', return_value=None)
-def test_addOptions_guest_controls(mock_guestControls, mock_input):
+@patch('builtins.input', side_effect=['4', '5'])
+@patch('f_AfterLogin.handleImportantLinks', return_value= 0)
+def test_addOptions_guest_controls(mock_handleImportantLinks, mock_input):
     assert addOptions("testuser") == 1
 
 @patch('builtins.input', side_effect=['5'])
