@@ -427,7 +427,7 @@ def handleImportantLinks(username):
                 saveUserLangSettings(newLanguage)
 
         #User does not change language setting
-        elif option == 2:
+        elif option == "2":
             print("Your current language setting is still: ", userLanguage)
 
         else:
