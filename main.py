@@ -69,8 +69,11 @@ def handle_general_link_selection(selection):
                     ###This part shows a bug in code since the while loop is no longer running on the condition of userselect.
                     ###Other instances need to be fixed
                     userselect = 0 #If LogIn Process is succesful, break out from loop
+                    
                     #LOGS USER IN
                     a_login.addOptions(b_login.username) 
+
+                    #a_login.addOptions(b_login.username)
                     break
                     
             #Show Success Story and Provide the option to see the video
@@ -113,9 +116,6 @@ def handle_general_link_selection(selection):
 
     elif selection in range(5, 8):
         print("Under construction")
-
-       
-
 
 
 
