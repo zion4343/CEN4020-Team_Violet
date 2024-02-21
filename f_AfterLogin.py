@@ -262,6 +262,46 @@ def returnFilename(number):
 
 
 ###Addded after Epic 3: Menus###
+
+# Function to read user settings from a file
+def readUserLangSettings():
+    try:
+        with open("Language_Choice.txt", "r") as file:
+            language = file.read().strip()
+
+    #If the file doesn't exist, it will return default language (English)
+    except FileNotFoundError:
+        language = "English"
+
+    return language
+
+
+#Function to save user language choice to a text file
+def saveUserLangSettings(language):
+    with open("Language_Choice.txt", "w") as file:
+        file.write(language)
+
+#Function to deal with the language selection
+def langSelect():
+    #has the user select their language preference
+    print("Select your preferred language: \n")
+    print("1. English\n")
+    print("2. Spanish\n")
+    langChoice = input("\nEnter your choice: ")
+
+    #Sets the language choice to 1 if English and 2 if Spanish
+    if langChoice == "1":
+        return "English"
+    
+    elif langChoice == "2":
+        return "Spanish"
+    
+    else:
+        print("Invalid choice")
+        return None
+
+
+
 #Function to display file content
 def getFile(filename):
     with open(filename, 'r') as file:
@@ -367,7 +407,32 @@ def handleImportantLinks(username):
 
     elif importantLinkChoice == 10:
         print("\nLanguages\n")
+
+        # Read user language choice
+        userLanguage = readUserLangSettings()
+
+        print("Welcome!")
+        print("Your current language setting:", userLanguage)
         
+        print("Please select an option:\n1. Select a new language setting \n2. Keep current language setting\n")
+        option = input("Enter your choice: ")
+
+        #If the user wants to change the language setting
+        if option == "1":
+            newLanguage = langSelect()
+
+            #When user language choice is updated successfully
+            if newLanguage:
+                print("\nLanguage updated successfully!")
+                saveUserLangSettings(newLanguage)
+
+        #User does not change language setting
+        elif option == 2:
+            print("Your current language setting is still: ", userLanguage)
+
+        else:
+            print("Invalid option")
+            
         #Gives user the chance to go back up a level in the menu or exit entirely
         userImportantReturn = int(input("Press 1 to return to previous menu or press 2 to exit entirely: "))
         userImportantExit(userImportantReturn, username)
