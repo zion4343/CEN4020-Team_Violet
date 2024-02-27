@@ -48,7 +48,8 @@ def addOptions(username):
         print("3. 3D Modeling & Simulation")
         print("4. Data Analysis")
         print("5. Language Learning")
-        print("6. Return to the previous level. . .")
+        print("6. Show my Network")
+        print("7. Return to the previous level. . .")
 
         #Presents the user with the option to choose a skill
         choiceSkill = input("Enter your skill choice: ")
@@ -67,9 +68,13 @@ def addOptions(username):
 
         elif choiceSkill == "5":
             print("The Language Learning option is currently under construction.")
-        
+        elif choiceSkill == "6":
+            showMyNetwork(username)
+            disconnectOption = input("Would you like to disconnect from anyone in your network? (yes/no): ")
+            if disconnectOption.lower() == "yes":
+                disconnectFromFriendOption(username)
         else:
-            print("6. Returning to the previous level. . .")
+            print("7. Returning to the previous level. . .")
             addOptions(username)
     elif choice == "4":
         guestControls(username)
@@ -77,6 +82,27 @@ def addOptions(username):
         print("Invalid choice.")
 
     return 1
+
+# Function to display connected friends
+def showMyNetwork(username):
+    if username in accFriends:
+        print("Your network:")
+        for friend in accFriends[username]:
+            print(friend)
+    else:
+        print("You haven't connected with anyone yet.")
+
+# Function to handle disconnection from friends
+def disconnectFromFriend(username, friend_to_disconnect):
+    if username in accFriends and friend_to_disconnect in accFriends[username]:
+        accFriends[username].remove(friend_to_disconnect)
+        if friend_to_disconnect in accFriends and username in accFriends[friend_to_disconnect]:
+            accFriends[friend_to_disconnect].remove(username)
+        print(f"You have disconnected from {friend_to_disconnect}.")
+    else:
+        print(f"You are not connected with {friend_to_disconnect}.")
+
+
 
 # Function to post a job
 def postJob(username):
@@ -163,8 +189,27 @@ def guestControls(username):
         toggleFeature(username, "sms")
     elif choice == "3":
         toggleFeature(username, "targeted_advertising")
-    elif choice == "4":
+    elif choice =="4":
         addOptions(username)
     else:
         print("Invalid choice.")
         guestControls(username)
+        
+        
+# Function to display connected friends
+def showMyNetwork(username):
+    if username in accFriends:
+        print("Your network:")
+        for friend in accFriends[username]:
+            print(friend)
+    else:
+        print("You haven't connected with anyone yet.")
+
+# Function to handle disconnection from friends
+def disconnectFromFriend(username, friend_to_disconnect):
+    if username in accFriends and friend_to_disconnect in accFriends[username]:
+        accFriends[username].remove(friend_to_disconnect)
+        accFriends[friend_to_disconnect].remove(username)
+        print(f"You have disconnected from {friend_to_disconnect}.")
+    else:
+        print(f"You are not connected with {friend_to_disconnect}.")

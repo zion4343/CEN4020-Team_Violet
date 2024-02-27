@@ -18,6 +18,8 @@ MAX_PASSWORD_LENGTH = 12
 #Name: Password
 accounts = {}
 accFullName = {}
+accFriends = {} # disctionaty to store friends
+pending_requests = {} # dictionary to store pending friend requests
 usernameTrue = ""
 special_characters = "!@#$%^&*()-+?_=,<>/"
 loginStat = 0
@@ -45,7 +47,7 @@ def CreateNewAccount():
             firstName = input(str("Please enter your first name: "))
             lastName = input(str("\nPlease enter your last name: "))
             fullname = firstName + lastName
-
+            accFriends[username] = []
             #Checks to make sure the full name is unique
             for i in accFullName.keys():
                 if(i == fullname): #Checks to see if the first name and last name are a unique combination
@@ -208,4 +210,47 @@ def connectPeople():
 
 
 
+
+
+# Function to send friend request
+def sendFriendRequest(sender, receiver):
+    if receiver in pending_requests:
+        pending_requests[receiver].append(sender)
+    else:
+        pending_requests[receiver] = [sender]
+    print("Friend request sent successfully.")
+
+# Function to display pending friend requests
+def displayPendingRequests(username):
+    if username in pending_requests:
+        print("Pending friend requests:")
+        for request in pending_requests[username]:
+            print(request)
+    else:
+        print("No pending friend requests.")
+
+# Function to handle accepting or rejecting friend requests
+def handleFriendRequests(receiver, sender, decision):
+    if decision.lower() == 'accept':
+        # Add sender to receiver's friends list
+        if receiver in accFriends:
+            accFriends[receiver].append(sender)
+        else:
+            accFriends[receiver] = [sender]
+        # Add receiver to sender's friends list
+        if sender in accFriends:
+            accFriends[sender].append(receiver)
+        else:
+            accFriends[sender] = [receiver]
+        # Remove sender from pending requests of receiver
+        if receiver in pending_requests:
+            pending_requests[receiver].remove(sender)
+        print("Friend request accepted.")
+    elif decision.lower() == 'reject':
+        # Remove sender from pending requests of receiver
+        if receiver in pending_requests:
+            pending_requests[receiver].remove(sender)
+        print("Friend request rejected.")
+    else:
+        print("Invalid decision.")
 
