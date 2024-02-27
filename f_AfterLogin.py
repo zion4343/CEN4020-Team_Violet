@@ -18,7 +18,7 @@ def addOptions(username):
     print("1. Search for a job/internship")
     print("2. Find someone you know")
     print("3. Learn a new skill")
-    print("4. Guest Controls")
+    print("4. InCollege Important Links")
     choice = input("Enter your choice: ")
 
     if choice == "1":
@@ -76,8 +76,21 @@ def addOptions(username):
         else:
             print("7. Returning to the previous level. . .")
             addOptions(username)
+
+    # elif choice == "4":
+    #     guestControls(username)
+
     elif choice == "4":
-        guestControls(username)
+        goingBackLoggedIn = handleImportantLinks(username)
+
+        #Checks if the user wants to come back to main screen after clicking InCollege Important Links
+        if goingBackLoggedIn == 0:
+            addOptions(username)
+
+        else: #Or go back to Important Links option
+            handleImportantLinks()
+        
+
     else:
         print("Invalid choice.")
 
@@ -106,7 +119,7 @@ def disconnectFromFriend(username, friend_to_disconnect):
 
 # Function to post a job
 def postJob(username):
-    loadJobPostings()
+    jobPostings = loadJobPostings()
     if len(jobPostings) >= 5:
         print("Maximum number of job postings reached.")
         return 0
@@ -127,7 +140,11 @@ def postJob(username):
         "posted_by": username
     }
 
-    jobPostings.append(job)
+  
+
+    job = np.array(job)  #Converts job to a numpy array 
+    jobPostings = np.concatenate((jobPostings, np.expand_dims(job, axis=0)), axis=0) #Concatenates job array
+
     print("Job posted successfully.")
 
     # Save the updated job postings
@@ -143,6 +160,8 @@ def loadJobPostings():
     except FileNotFoundError:
         jobPostings = []
 
+    return jobPostings
+
 # Dictionary to store user settings
 user_settings = {}
 
@@ -154,8 +173,6 @@ def loadUserSettings():
     except FileNotFoundError:
         user_settings = {}
 
-# Call this function at the beginning of the main program
-loadUserSettings()
 
 # Function to toggle features on and off
 def toggleFeature(username, feature):
@@ -171,6 +188,7 @@ def toggleFeature(username, feature):
 
     # Save the updated user settings
     np.save("user_settings.npy", user_settings)
+    return 1
 
         
 # Function to handle guest controls
@@ -185,15 +203,272 @@ def guestControls(username):
 
     if choice == "1":
         toggleFeature(username, "email")
+        addOptions(username)
     elif choice == "2":
         toggleFeature(username, "sms")
+        addOptions(username)
     elif choice == "3":
         toggleFeature(username, "targeted_advertising")
-    elif choice =="4":
+        addOptions(username)
+    elif choice == "4":
         addOptions(username)
     else:
         print("Invalid choice.")
         guestControls(username)
+    return 1
+
+
+
+
+#Verifies if the user is inputting a number in the acceptable range (a more general purpose one needs to be made)
+def inputValidation(prompt, valid_options):
+    while True:
+        try:
+            user_input = int(input(prompt))
+            if user_input in valid_options:
+                return user_input
+            print("Invalid input. Please try again.")
+        except ValueError:
+            print("Invalid input. Please enter a number.")
+
+
+#Displays all the InCollege Important Links (if 5 is chosen)
+def displayImportantLinks():
+    print("\nInCollege Important Links:")
+    print("1. Copyright Notice")
+    print("2. About")
+    print("3. Accessibility")
+    print("4. User Agreement")
+    print("5. Privacy Policy")
+    print("6. Cookie Policy")
+    print("7. Copyright Policy")
+    print("8. Brand Policy")
+    print("9. Guest Controls")
+    print("10. Languages")
+    print("0. Back")
+
+
+
+ #Gives user the chance to go back up a level in the menu or exit entirely#
+def userImportantExit(userChoice, username):
+    if userChoice == 1:
+        handleImportantLinks(username)
+        
+    else:
+        return 0
+    
+
+#Names the files to be printed according to user selection
+def returnFilename(number):
+    if number == 1:
+        file = "Copyright_Notice.txt"
+    
+    elif number == 2:
+        file = "About.txt"
+
+    elif number == 3:
+        file = "About.txt"
+
+    elif number == 4:
+        file = "User_Agreement.txt"
+
+    elif number == 5:
+        file = "Privacy_Policy.txt"
+
+    elif number == 6:
+        file = "Cookie_Policy.txt"
+    
+    elif number == 7:
+        file = "Copyright_Policy.txt"
+
+    elif number == 8:
+        file = "Brand_Policy.txt"
+
+    return file
+
+
+###Addded after Epic 3: Menus###
+
+# Function to read user settings from a file
+def readUserLangSettings():
+    try:
+        with open("Language_Choice.txt", "r") as file:
+            language = file.read().strip()
+
+    #If the file doesn't exist, it will return default language (English)
+    except FileNotFoundError:
+        language = "English"
+
+    return language
+
+
+#Function to save user language choice to a text file
+def saveUserLangSettings(language):
+    with open("Language_Choice.txt", "w") as file:
+        file.write(language)
+
+#Function to deal with the language selection
+def langSelect():
+    #has the user select their language preference
+    print("Select your preferred language: \n")
+    print("1. English\n")
+    print("2. Spanish\n")
+    langChoice = input("\nEnter your choice: ")
+
+    #Sets the language choice to 1 if English and 2 if Spanish
+    if langChoice == "1":
+        return "English"
+    
+    elif langChoice == "2":
+        return "Spanish"
+    
+    else:
+        print("Invalid choice")
+        return None
+
+
+
+#Function to display file content
+def getFile(filename):
+    with open(filename, 'r') as file:
+        content = file.read()
+    print(content)
+
+
+
+#Takes the selection of user in main.py and if it is 5 (Important Links, then it displays the Important Links menu)
+def handleImportantLinks(username):
+
+    #This is to display the InCollege Important Links before the user is logged in 
+    displayImportantLinks()
+    back = 0
+
+    #User chooses between 0 and 10 for various options
+    importantLinkChoice = inputValidation("\n\nPlease select the number corresponding to your choice: ", list(range(11)))
+
+    #Displays the content for every option chosen
+    if importantLinkChoice == 1:
+
+        
+        print("\nCopyright Notice\n")
+        filename = returnFilename(importantLinkChoice)
+        getFile(filename)
+        
+        #Gives user the chance to go back up a level in the menu or exit entirely
+        userImportantReturn = int(input("Press 1 to return to previous menu or press 2 to exit entirely: "))
+        userImportantExit(userImportantReturn, username)
+
+    elif importantLinkChoice == 2:
+        
+        print("\nAbout\n")
+        filename = returnFilename(importantLinkChoice)
+        getFile(filename)
+        
+        #Gives user the chance to go back up a level in the menu or exit entirely
+        userImportantReturn = int(input("Press 1 to return to previous menu or press 2 to exit entirely: "))
+        userImportantExit(userImportantReturn, username)
+
+    elif importantLinkChoice == 3:
+        print("\nAccessibility\n")
+        filename = returnFilename(importantLinkChoice)
+        getFile(filename)
+        
+        #Gives user the chance to go back up a level in the menu or exit entirely
+        userImportantReturn = int(input("Press 1 to return to previous menu or press 2 to exit entirely: "))
+        userImportantExit(userImportantReturn, username)
+
+    elif importantLinkChoice == 4:
+        print("\nUser Agreement\n")
+        filename = returnFilename(importantLinkChoice)
+        getFile(filename)
+        
+        #Gives user the chance to go back up a level in the menu or exit entirely
+        userImportantReturn = int(input("Press 1 to return to previous menu or press 2 to exit entirely: "))
+        userImportantExit(userImportantReturn, username)
+
+    elif importantLinkChoice == 5:
+        print("\nPrivacy Policy\n")
+        filename = returnFilename(importantLinkChoice)
+        getFile(filename)
+        
+        #Gives user the chance to go back up a level in the menu or exit entirely
+        userImportantReturn = int(input("Press 1 to return to previous menu or press 2 to exit entirely: "))
+        userImportantExit(userImportantReturn, username)
+
+    elif importantLinkChoice == 6:
+        print("\nCookie Policy\n")
+        filename = returnFilename(importantLinkChoice)
+        getFile(filename)
+        
+        #Gives user the chance to go back up a level in the menu or exit entirely
+        userImportantReturn = int(input("Press 1 to return to previous menu or press 2 to exit entirely: "))
+        userImportantExit(userImportantReturn, username)
+
+    elif importantLinkChoice == 7:
+        print("\nCopyright Policy\n")
+        filename = returnFilename(importantLinkChoice)
+        getFile(filename)
+        
+        #Gives user the chance to go back up a level in the menu or exit entirely
+        userImportantReturn = int(input("Press 1 to return to previous menu or press 2 to exit entirely: "))
+        userImportantExit(userImportantReturn, username)
+
+    elif importantLinkChoice == 8:
+        print("\nBrand Policy\n")
+        filename = returnFilename(importantLinkChoice)
+        getFile(filename)
+        
+        #Gives user the chance to go back up a level in the menu or exit entirely
+        userImportantReturn = int(input("Press 1 to return to previous menu or press 2 to exit entirely: "))
+        userImportantExit(userImportantReturn, username)
+
+    elif importantLinkChoice == 9:
+        print("\nGuest Controls\n")
+        guestControls(username)
+        
+        
+        #Gives user the chance to go back up a level in the menu or exit entirely
+        userImportantReturn = int(input("Press 1 to return to previous menu or press 2 to exit entirely: "))
+        userImportantExit(userImportantReturn, username)
+
+    elif importantLinkChoice == 10:
+        print("\nLanguages\n")
+
+        # Read user language choice
+        userLanguage = readUserLangSettings()
+
+        print("Welcome!")
+        print("Your current language setting:", userLanguage)
+        
+        print("Please select an option:\n1. Select a new language setting \n2. Keep current language setting\n")
+        option = input("Enter your choice: ")
+
+        #If the user wants to change the language setting
+        if option == "1":
+            newLanguage = langSelect()
+
+            #When user language choice is updated successfully
+            if newLanguage:
+                print("\nLanguage updated successfully!")
+                saveUserLangSettings(newLanguage)
+
+        #User does not change language setting
+        elif option == "2":
+            print("Your current language setting is still: ", userLanguage)
+
+        else:
+            print("Invalid option")
+            
+        #Gives user the chance to go back up a level in the menu or exit entirely
+        userImportantReturn = int(input("Press 1 to return to previous menu or press 2 to exit entirely: "))
+        userImportantExit(userImportantReturn, username)
+
+    elif importantLinkChoice == 0:
+        return 0
+
+   
+    
+    return back
         
         
 # Function to display connected friends

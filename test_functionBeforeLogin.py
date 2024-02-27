@@ -1,42 +1,47 @@
+'''
+Test Script to test the functions in f_BeforeLogin.py
+'''
+
 import pytest
 import numpy as np
 from unittest.mock import patch
-from f_BeforeLogin import CreateNewAccount, LogIn, successStory, connectPeople
+from f_BeforeLogin import CreateNewAccount, LogIn, successStory, connectPeople, handleImportantLinks
 
-# Test CreateNewAccount function
-def test_CreateNewAccount():
-    # Test account creation with valid inputs
-    with pytest.raises(SystemExit):
-        # Simulate user input for testing
-        inputs = iter(['Test', 'User', 'test_user', 'Test123!', 'Test123!', 'n'])
-        # Patch input function to return predefined values
-        with pytest.raises(SystemExit):
-            with patch('builtins.input', lambda: next(inputs)):
-                CreateNewAccount()
-
-# Test LogIn function
-def test_LogIn():
-    # Test login with existing account
-    with patch('builtins.input', side_effect=['test_user', 'Test123!']), \
-         patch('f_BeforeLogin.accounts', {'test_user': 'Test123!'}):
-        assert LogIn() == 1
-
-    # Test login with incorrect password
-    with patch('builtins.input', side_effect=['test_user', 'WrongPassword']), \
-         patch('f_BeforeLogin.accounts', {'test_user': 'Test123!'}):
-        assert LogIn() == 0
-
-    # Test login with non-existing account
-    with patch('builtins.input', side_effect=['NonExistingUser', 'Test123!']), \
-         patch('f_BeforeLogin.accounts', {'test_user': 'Test123!'}):
-        assert LogIn() == 0
-
-# Test connectPeople function
-def test_connectPeople():
-    # Test connection with existing user
-    with patch('builtins.input', side_effect=['Test', 'User', 1]):
-        assert connectPeople() is None
-
-    # Test connection with non-existing user
-    with patch('builtins.input', side_effect=['NonExisting', 'User']):
-        assert connectPeople() is None
+#Test CreateNewAccount()
+@patch('builtins.input', side_effect=['John', 'Doe', 'johndoe', 'Password123!'])
+@patch('f_BeforeLogin.readDictonary', return_value=None)
+@patch('f_BeforeLogin.writeDictonary', return_value=None)
+def test_CreateNewAccount(mock_readDictonary, mock_writeDictonary, mock_input):
+    assert CreateNewAccount() == 1
+    
+#Invalid Password
+@patch('builtins.input', side_effect=['Joe', 'Doe', 'joedoe', 'invalid123', 'Password123!'])
+@patch('f_BeforeLogin.readDictonary', return_value=None)
+@patch('f_BeforeLogin.writeDictonary', return_value=None)
+def test_CreateInvalidAccount(mock_readDictonary, mock_writeDictonary, mock_input):
+    assert CreateNewAccount() == 1
+    
+#Test LogIn()
+@patch('builtins.input', side_effect=['johndoe', 'Password123!'])
+@patch('f_BeforeLogin.readDictonary', return_value={'johndoe': 'Password123!'})
+def test_LogIn(mock_readDictonary, mock_input):
+    assert LogIn() == 1
+    
+#Test successStory()
+def test_successStory():
+    assert successStory() == 1
+    
+#Test connectPeople()
+@patch('builtins.input', side_effect=['John', 'Doe', '1'])
+@patch('f_BeforeLogin.readDictonary', return_value={'JohnDoe': 'Password123!'})
+def test_connectPeople(mock_readDictonary, mock_input):
+    assert connectPeople() == 1
+    
+#Test handleImportantLinks()
+@patch('builtins.input', side_effect=['1', '1', '1', '2'])
+def test_handleImportantLinks(mock_input):
+    assert handleImportantLinks() == 0
+    
+@patch('builtins.input', side_effect=['1', '2'])
+def test_handleImportantLinks_Quit(mock_input):
+    assert handleImportantLinks() == 0
