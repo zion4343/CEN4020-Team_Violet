@@ -6,7 +6,9 @@ The functions support After Log-in
 Import
 '''
 import numpy as np
-
+#from f_BeforeLogin import accFullName
+#from f_BeforeLogin import readDictionary
+import f_BeforeLogin as b_login
 '''
 Functions
 '''
@@ -488,3 +490,89 @@ def disconnectFromFriend(username, friend_to_disconnect):
         print(f"You have disconnected from {friend_to_disconnect}.")
     else:
         print(f"You are not connected with {friend_to_disconnect}.")
+
+# Function to find users by last name
+def findUsersByLastName(last_name):
+    # Load the full names and usernames from the file
+    try:
+        fullnames = np.load("fullnames.npy", allow_pickle=True).item()
+    except FileNotFoundError:
+        print("Error: Fullnames file not found.")
+        return []
+
+    # Search for users based on the last name
+    matching_users = []
+    for user, fullname in fullnames.items():
+        # Check if the last name matches
+        if last_name.lower() in fullname.lower():
+            matching_users.append(user)
+
+    return matching_users
+
+# Function to find users by major
+def findUsersByMajor(major):
+    # Load user information
+    user_info = b_login.readUserInformation()
+
+    # Search for users based on the major
+    matching_users = []
+    for user, info in user_info.items():
+        if 'major' in info and major.lower() in info['major'].lower():
+            matching_users.append(user)
+
+    return matching_users
+
+# Function to find users by university
+def findUsersByUniversity(university):
+    # Load user information
+    user_info = b_login.readUserInformation()
+
+    # Search for users based on the university
+    matching_users = []
+    for user, info in user_info.items():
+        if 'university' in info and university.lower() in info['university'].lower():
+            matching_users.append(user)
+
+    return matching_users
+
+# Function to send friend request
+def sendFriendRequest(sender, receiver):
+    if receiver in pending_requests:
+        pending_requests[receiver].append(sender)
+    else:
+        pending_requests[receiver] = [sender]
+    print("Friend request sent successfully.")
+
+# Function to display pending friend requests
+def displayPendingRequests(username):
+    if username in pending_requests:
+        print("Pending friend requests:")
+        for request in pending_requests[username]:
+            print(request)
+    else:
+        print("No pending friend requests.")
+
+# Function to handle accepting or rejecting friend requests
+def handleFriendRequests(receiver, sender, decision):
+    if decision.lower() == 'accept':
+        # Add sender to receiver's friends list
+        if receiver in accFriends:
+            accFriends[receiver].append(sender)
+        else:
+            accFriends[receiver] = [sender]
+        # Add receiver to sender's friends list
+        if sender in accFriends:
+            accFriends[sender].append(receiver)
+        else:
+            accFriends[sender] = [receiver]
+        # Remove sender from pending requests of receiver
+        if receiver in pending_requests:
+            pending_requests[receiver].remove(sender)
+        print("Friend request accepted.")
+    elif decision.lower() == 'reject':
+        # Remove sender from pending requests of receiver
+        if receiver in pending_requests:
+            pending_requests[receiver].remove(sender)
+        print("Friend request rejected.")
+    else:
+        print("Invalid decision.")
