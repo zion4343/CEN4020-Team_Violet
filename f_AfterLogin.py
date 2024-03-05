@@ -82,9 +82,6 @@ def addOptions(username):
         print("The Language Learning option is currently under construction.")
       elif choiceSkill == "6":
         showMyNetwork(username)
-        disconnectOption = input("Would you like to disconnect from anyone in your network? (yes/no): ")
-        if disconnectOption.lower() == "yes":
-            disconnectFromFriendOption(username)
       else:
           print("7. Returning to the previous level. . .")
           addOptions(username)
@@ -104,6 +101,7 @@ def addOptions(username):
     
   elif choice == "6":
       createProfile(username)
+
   else:
     print("Invalid choice.")
     addOptions(username)
