@@ -11,7 +11,7 @@ import os
 '''
 Pre-difined Variables
 '''
-MAX_ACCOUNTS = 5
+MAX_ACCOUNTS = 10
 MIN_PASSWORD_LENGTH = 8
 MAX_PASSWORD_LENGTH = 12
 
@@ -19,7 +19,6 @@ MAX_PASSWORD_LENGTH = 12
 #Name: Password
 accounts = {}
 accFullName = {}
-accFriends = {} # disctionaty to store friends
 pending_requests = {} # dictionary to store pending friend requests
 usernameTrue = ""
 special_characters = "!@#$%^&*()-+?_=,<>/"
@@ -48,7 +47,8 @@ def getFile(filename):
 #Ask unique username and secure password: 
 #minimum of 8 characters, maximum of 12 characters, at least one capital letter, one digit, one special character
 def CreateNewAccount():
-    readDictonary()
+    global username
+    readDictionary()
     if(len(accounts) >= MAX_ACCOUNTS):
         print("All permitted accounts have been created, please come back later")
         return 0
@@ -59,7 +59,7 @@ def CreateNewAccount():
             firstName = input(str("Please enter your first name: "))
             lastName = input(str("\nPlease enter your last name: "))
             fullname = firstName + lastName
-            accFriends[username] = []
+            
             #Checks to make sure the full name is unique
             for i in accFullName.keys():
                 if(i == fullname): #Checks to see if the first name and last name are a unique combination
@@ -67,8 +67,6 @@ def CreateNewAccount():
                     print("\n")
                     flagUpdate(True)
                     break
-                    
-
                 else:
                     break
 
@@ -84,18 +82,14 @@ def CreateNewAccount():
                             print("This name already exists for an account")
                             print("\n")
                             break
-                    
-
                         else:
                             flagUpdate(False)
                             break
             else:
                 #Moves on to making a username
                 print("")
-                
-             
+                    
             #Checks to make sure the username is unique
-            global username
             username = input("Input your Username: ")
             for i in accounts.keys():
                 if(i == username):
@@ -123,8 +117,7 @@ def CreateNewAccount():
             if(len(password) < MIN_PASSWORD_LENGTH or len(password) > MAX_PASSWORD_LENGTH):
                 print("Invalid password")
                 print("\n")
-                continue
-            
+                continue        
             #Password Letters
             for i in password:
                 if(i.isupper()):
@@ -134,28 +127,43 @@ def CreateNewAccount():
                 elif any(c in special_characters for c in i):
                     hasSpecial = 1
             
-            if(hasCapital and hasDigit and hasSpecial):
-                accounts[username] = password
-                accFullName[fullname] = username #Saves the firstName and lastName as the key and the username as the value
-                print("Your account created successful!")
-                print("\n")
-                writeDictonary()
-                return 1
+            if hasCapital and hasDigit and hasSpecial:
+                    # Ask for major and university
+                    major = input("Please enter your major: ")
+                    university = input("Please enter your university: ")
+
+                    # Store account information
+                    accounts[username] = {
+                        'password': password,
+                        'major': major,
+                        'university': university,
+                        'last_name': lastName,
+                        'full_name': fullname,
+                        'friends': []
+                    }
+                    accFullName[fullname] = username
+                    print("Your account was created successfully!")
+                    print()
+                    writeDictonary()
+                    return 1
             else:
                 print("Invalid password")
-                print("\n")
+                print()
+        else:
+            print("Invalid password length")
+            print()
         
 
 #The function that log in with existing account
 #When succeed LogIn return 1, else return 0
 def LogIn():
-    readDictonary()
+    readDictionary()
     global username
     username = input("Input your Username: ")
     password = input("Input your Password: ")
-    for name, pw in accounts.items():
-        if(name == username):
-            if(pw == password):
+    for name, info in accounts.items():
+        if name == username:
+            if info['password'] == password:  # Compare the entered password with the password stored in the dictionary
                 print("Login was successful!")
                 print("\n")
                 return 1
@@ -182,7 +190,7 @@ def writeDictonary():
     np.save("fullnames.npy", accFullName)
     return 1
 
-def readDictonary():
+def readDictionary():
     # print(" ")
     py_dict = np.load("accounts.npy", allow_pickle = "TRUE")
     py_dictFullName = np.load("fullnames.npy", allow_pickle = "TRUE")
@@ -197,7 +205,7 @@ def readDictonary():
 
 #This function connects user with people that can help them
 def connectPeople():
-    readDictonary() #Puts the name values in accounts and accFullName dictionary
+    readDictionary() #Puts the name values in accounts and accFullName dictionary
     firstNameSearch = input(str("Please enter the first name of the person you are looking for: "))
     lastNameSearch = input(str("\nNow please enter the last name of the person you are looking for: "))
     fullNameSearch = firstNameSearch + lastNameSearch
@@ -212,14 +220,10 @@ def connectPeople():
         searchJoin = int(input("Please select 1 to log in or select 2 to sign up: "))
 
         return searchJoin
-
-
-        
-
+    
     else: #When no match is found
         print("\nThey are not yet a part of the InCollege system yet \n")
         return 1
-
 
 #Verifies if the user is inputting a number in the acceptable range (a more general purpose one needs to be made)
 def inputValidation(prompt, valid_options):
@@ -231,7 +235,6 @@ def inputValidation(prompt, valid_options):
             print("Invalid input. Please try again.")
         except ValueError:
             print("Invalid input. Please enter a number.")
-
 
 #Displays all the InCollege Important Links (if 5 is chosen)
 def displayImportantLinks():
@@ -248,16 +251,12 @@ def displayImportantLinks():
     print("10. Languages")
     print("0. Back")
 
-
-
  #Gives user the chance to go back up a level in the menu or exit entirely#
 def userImportantExit(userChoice):
     if userChoice == 1:
-        handleImportantLinks()
-        
+        handleImportantLinks()      
     else:
         return 0
-    
 
 #Names the files to be printed according to user selection
 def returnFilename(number):
@@ -395,20 +394,8 @@ def handleImportantLinks():
    
     
     return back
-        
 
-
-
-    
-
-
-
-
-
- 
-        
-
-
+'''
 # Function to send friend request
 def sendFriendRequest(sender, receiver):
     if receiver in pending_requests:
@@ -426,28 +413,5 @@ def displayPendingRequests(username):
     else:
         print("No pending friend requests.")
 
-# Function to handle accepting or rejecting friend requests
-def handleFriendRequests(receiver, sender, decision):
-    if decision.lower() == 'accept':
-        # Add sender to receiver's friends list
-        if receiver in accFriends:
-            accFriends[receiver].append(sender)
-        else:
-            accFriends[receiver] = [sender]
-        # Add receiver to sender's friends list
-        if sender in accFriends:
-            accFriends[sender].append(receiver)
-        else:
-            accFriends[sender] = [receiver]
-        # Remove sender from pending requests of receiver
-        if receiver in pending_requests:
-            pending_requests[receiver].remove(sender)
-        print("Friend request accepted.")
-    elif decision.lower() == 'reject':
-        # Remove sender from pending requests of receiver
-        if receiver in pending_requests:
-            pending_requests[receiver].remove(sender)
-        print("Friend request rejected.")
-    else:
-        print("Invalid decision.")
+'''
 
