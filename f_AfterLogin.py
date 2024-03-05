@@ -24,6 +24,7 @@ def addOptions(username):
   print("3. Learn a new skill")
   print("4. InCollege Important Links")
   print("5. Manage friend requests")
+  print("6. Create your Personal Profile")
   print("\n")
   choice = input("Enter your choice: ")
 
@@ -81,6 +82,9 @@ def addOptions(username):
         print("The Language Learning option is currently under construction.")
       elif choiceSkill == "6":
         showMyNetwork(username)
+        disconnectOption = input("Would you like to disconnect from anyone in your network? (yes/no): ")
+        if disconnectOption.lower() == "yes":
+            disconnectFromFriendOption(username)
       else:
           print("7. Returning to the previous level. . .")
           addOptions(username)
@@ -97,7 +101,9 @@ def addOptions(username):
 
   elif choice == "5":
     manageFriendRequests(username)
-
+    
+  elif choice == "6":
+      createProfile(username)
   else:
     print("Invalid choice.")
     addOptions(username)
@@ -771,3 +777,94 @@ def findUsersByLastName(last_name):
 
     return matching_users
 '''
+
+# Function to create or update a personal profile
+def createProfile(username):
+  try:
+    # Load existing profile if it exists
+    profile = np.load(f"{username}_profile.npy", allow_pickle=True).item()
+    print("Existing Profile Found. You can update it.")
+  except FileNotFoundError:
+    # If profile doesn't exist, create a new one
+    print("Create Your Personal Profile:")
+    profile = {
+        "title": "",
+        "major": "",
+        "university": "",
+        "about": "",
+        "experience": [],
+        "education": []
+    }
+
+  # Display existing profile (if any) and options
+  print("\nYour Profile:")
+  displayProfile(profile)
+  print("\nOptions:")
+  print("1. Update title")
+  print("2. Update major")
+  print("3. Update university")
+  print("4. Update about")
+  print("5. Add experience")
+  print("6. Add education")
+  print("7. Quit")
+
+  while True:
+    choice = input("Enter your choice of operation (between 1 and 7): ")
+    if choice == "1":
+      profile["title"] = input("Enter your profile title: ")
+    elif choice == "2":
+      profile["major"] = formatText(input("Enter your major: "))
+    elif choice == "3":
+      profile["university"] = formatText(input("Enter your university name: "))
+    elif choice == "4":
+      profile["about"] = input("Write a paragraph about yourself: ")
+    elif choice == "5":
+      addExperience(profile)
+    elif choice == "6":
+      addEducation(profile)
+    elif choice == "7":
+      break
+    else:
+      print("Invalid choice.")
+
+  # Save profile
+  np.save(f"{username}_profile.npy", np.array(profile))
+  print("Profile updated successfully.")
+
+
+# Function to display profile
+def displayProfile(profile):
+  if profile:
+    for key, value in profile.items():
+      if isinstance(value, list):
+        print(f"{key.capitalize()}:")
+        for item in value:
+          print(f" - {item}")
+      else:
+        print(f"{key.capitalize()}: {value}")
+  else:
+    print("No profile found.")
+
+
+# Function to add experience
+def addExperience(profile):
+  if len(profile["experience"]) >= 3:
+    print("Maximum limit of experiences reached.")
+    return
+
+  experience = input(
+      "Enter information for experience (leave blank to skip): ")
+  if experience:
+    profile["experience"].append(experience)
+
+
+# Function to add education
+def addEducation(profile):
+  education = input("Enter information for education (leave blank to skip): ")
+  if education:
+    profile["education"].append(education)
+
+
+# Function to format text (capitalize first letter of each word)
+def formatText(text):
+  return " ".join(word.capitalize() for word in text.split())

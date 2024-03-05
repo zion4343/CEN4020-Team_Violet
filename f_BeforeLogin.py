@@ -19,6 +19,7 @@ MAX_PASSWORD_LENGTH = 12
 #Name: Password
 accounts = {}
 accFullName = {}
+accFriends = {} # disctionaty to store friends
 pending_requests = {} # dictionary to store pending friend requests
 usernameTrue = ""
 special_characters = "!@#$%^&*()-+?_=,<>/"
@@ -47,7 +48,6 @@ def getFile(filename):
 #Ask unique username and secure password: 
 #minimum of 8 characters, maximum of 12 characters, at least one capital letter, one digit, one special character
 def CreateNewAccount():
-    global username
     readDictionary()
     if(len(accounts) >= MAX_ACCOUNTS):
         print("All permitted accounts have been created, please come back later")
@@ -59,7 +59,7 @@ def CreateNewAccount():
             firstName = input(str("Please enter your first name: "))
             lastName = input(str("\nPlease enter your last name: "))
             fullname = firstName + lastName
-            
+
             #Checks to make sure the full name is unique
             for i in accFullName.keys():
                 if(i == fullname): #Checks to see if the first name and last name are a unique combination
@@ -67,6 +67,8 @@ def CreateNewAccount():
                     print("\n")
                     flagUpdate(True)
                     break
+                    
+
                 else:
                     break
 
@@ -82,14 +84,18 @@ def CreateNewAccount():
                             print("This name already exists for an account")
                             print("\n")
                             break
+                    
+
                         else:
                             flagUpdate(False)
                             break
             else:
                 #Moves on to making a username
                 print("")
-                    
+                
+             
             #Checks to make sure the username is unique
+            global username
             username = input("Input your Username: ")
             for i in accounts.keys():
                 if(i == username):
@@ -117,7 +123,8 @@ def CreateNewAccount():
             if(len(password) < MIN_PASSWORD_LENGTH or len(password) > MAX_PASSWORD_LENGTH):
                 print("Invalid password")
                 print("\n")
-                continue        
+                continue
+            
             #Password Letters
             for i in password:
                 if(i.isupper()):
@@ -127,31 +134,16 @@ def CreateNewAccount():
                 elif any(c in special_characters for c in i):
                     hasSpecial = 1
             
-            if hasCapital and hasDigit and hasSpecial:
-                    # Ask for major and university
-                    major = input("Please enter your major: ")
-                    university = input("Please enter your university: ")
-
-                    # Store account information
-                    accounts[username] = {
-                        'password': password,
-                        'major': major,
-                        'university': university,
-                        'last_name': lastName,
-                        'full_name': fullname,
-                        'friends': []
-                    }
-                    accFullName[fullname] = username
-                    print("Your account was created successfully!")
-                    print()
-                    writeDictonary()
-                    return 1
+            if(hasCapital and hasDigit and hasSpecial):
+                accounts[username] = password
+                accFullName[fullname] = username #Saves the firstName and lastName as the key and the username as the value
+                print("Your account created successful!")
+                print("\n")
+                writeDictonary()
+                return 1
             else:
                 print("Invalid password")
-                print()
-        else:
-            print("Invalid password length")
-            print()
+                print("\n")
         
 
 #The function that log in with existing account
