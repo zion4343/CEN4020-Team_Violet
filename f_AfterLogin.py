@@ -101,7 +101,6 @@ def addOptions(username):
     
   elif choice == "6":
       createProfile(username)
-
   else:
     print("Invalid choice.")
     addOptions(username)
@@ -795,8 +794,8 @@ def createProfile(username):
     }
 
   # Display existing profile (if any) and options
-  print("\nYour Profile:")
-  displayProfile(profile)
+  #print("\nYour Profile:")
+  displayProfile(profile, username)
   print("\nOptions:")
   print("1. Update title")
   print("2. Update major")
@@ -804,10 +803,12 @@ def createProfile(username):
   print("4. Update about")
   print("5. Add experience")
   print("6. Add education")
-  print("7. Quit")
+  print("7. Display profile")
+  print("8. Display friends profile")
+  print("9. Quit")
 
   while True:
-    choice = input("Enter your choice of operation (between 1 and 7): ")
+    choice = input("Enter your choice of operation (between 1 and 9): ")
     if choice == "1":
       profile["title"] = input("Enter your profile title: ")
     elif choice == "2":
@@ -821,6 +822,15 @@ def createProfile(username):
     elif choice == "6":
       addEducation(profile)
     elif choice == "7":
+       displayProfile(profile, username)
+       break
+    elif choice == "8":
+       displayFriendsList(username)
+       friend_username = input("Enter the username of the friend whose profile you want to display: ")
+       print("")
+       displayfriendprofile(username, friend_username)
+       break
+    elif choice == "9":
       break
     else:
       print("Invalid choice.")
@@ -831,8 +841,9 @@ def createProfile(username):
 
 
 # Function to display profile
-def displayProfile(profile):
+def displayProfile(profile, username):
   if profile:
+    print(f"{username}'s profile:")
     for key, value in profile.items():
       if isinstance(value, list):
         print(f"{key.capitalize()}:")
@@ -843,6 +854,77 @@ def displayProfile(profile):
   else:
     print("No profile found.")
 
+def displayFriendsList(username):
+    accounts = np.load('accounts.npy', allow_pickle=True).item()
+    if 'friends' in accounts[username]:
+        friends_list = accounts[username]['friends']
+        print("")
+        print("Your Friends:")
+        for friend_username in friends_list:
+            friend_full_name = accounts[friend_username].get('full_name', 'No name available')
+            print(f"Username: {friend_username} , Full Name: {friend_full_name} -Profile")
+    else:
+        print("You don't have any friends.")
+
+
+def displayfriendprofile(username, friend_username):
+    accounts = np.load('accounts.npy', allow_pickle=True).item()  
+    if friend_username in accounts[username]['friends']:
+        friend_full_name = accounts[friend_username].get('full_name', 'No name available')
+        #print(f"{friend_username}'s Profile:")
+        print(f"Full Name: {friend_full_name}")
+        # Check if profile file exists for the friend
+        try:
+            friend_profile = np.load(f"{friend_username}_profile.npy", allow_pickle=True).item()
+            displayProfile(friend_profile, friend_username)
+        except FileNotFoundError:
+            print("No profile found for this friend.")
+    else:
+        print("You are not friends with this person.")
+        
+# Function to handle the option to display a friend's profile
+# def displayFriendProfileOption(username):
+#     # Display user's friends
+#     showMyNetwork(username)
+    
+#     # Let the user select a friend's profile
+#     friend_index = int(input("Select a friend's profile (enter the corresponding number): "))
+    
+#     # Get the selected friend's username
+#     accounts = np.load('accounts.npy', allow_pickle=True).item()
+#     if username in accounts and 'friends' in accounts[username]:
+#         friends_list = accounts[username]['friends']
+#         if 1 <= friend_index <= len(friends_list):
+#             selected_friend_username = friends_list[friend_index - 1]
+#             profile = np.load(f"{selected_friend_username}_profile.npy", allow_pickle=True).item()
+#             displayfriendprofile(profile, username, selected_friend_username)
+#         else:
+#             print("Invalid selection.")
+#     else:
+#         print("User not found or no friends list available.")
+
+
+# def displayfriendprofile(profile, username):
+#   accounts = np.load('accounts.npy', allow_pickle=True).item()  
+#   if username in accounts and 'friends' in accounts[username]:
+#       friends_list = accounts[username]['friends']
+#       if friends_list:
+#           print(f"{username}'s friends network:")
+#           for index, friend_username in enumerate(friends_list, start=1):
+#               friend_full_name = accounts[friend_username].get('full_name', 'No name available')
+#               print(f"{index}. {friend_full_name}")
+
+#           # Letting the user select a friend's profile
+#           selected_index = int(input("Select a friend's profile (enter the corresponding number): "))
+#           if 1 <= selected_index <= len(friends_list):
+#               selected_friend_username = friends_list[selected_index - 1]
+#               displayProfile(profile, selected_friend_username)  
+#           else:
+#               print("Invalid selection.")
+#       else:
+#             print("You don't have any friends yet.")
+#   else:
+#         print("User not found or no friends list available.")
 
 # Function to add experience
 def addExperience(profile):
