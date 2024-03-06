@@ -1,173 +1,147 @@
 '''
-The program support Log-in Interface
-There provide two options, Log-in with existing account or creating new account
+The program support main function for InCollege Software
 '''
-MAX_ACCOUNTS = 5
-MIN_PASSWORD_LENGTH = 8
-MAX_PASSWORD_LENGTH = 12
 
-#The directionary that store 5 unique student accounts
-#Name: Password
-account = {}
+'''
+Import
+'''
+import f_BeforeLogin as b_login
+import f_AfterLogin as a_login
 
-special_characters = "!@#$%^&*()-+?_=,<>/"
 '''
 Functions
 '''
-#The function that create new unique account
-#Ask unique username and secure password: 
-#minimum of 8 characters, maximum of 12 characters, at least one capital letter, one digit, one special character
-def CreateNewAccount():
-    if(len(account) > MAX_ACCOUNTS):
-        print("All permitted accounts have been created, please come back later")
-    else:
-        #Ask Unique username
-        while(1):
-            username = input("Input your Username: ")
-            for i in account.keys():
-                if(i == username):
-                    print("Existing username")
+# Function displays all links
+def displayLinks():
+    print("\nUseful Links:")
+    print("1. General")
+    print("2. Browse InCollege")
+    print("3. Business Solutions")
+    print("4. Directories")
+    print("5. InCollege Important Links")
+    print("0. Exit")
+
+# Displays all the general links (if 1 is chosen)
+def displayGeneralLinks():
+    print("\nGeneral Links:")
+    print("1. Sign Up")
+    print("2. Help Center")
+    print("3. About")
+    print("4. Press")
+    print("5. Blog")
+    print("6. Careers")
+    print("7. Developers")
+    print("0. Back")
+
+# Handling the links to the General selections
+def handle_general_link_selection(selection):
+    if selection == 1:
+        while True:
+            print("\n1. Create new account")
+            print("2. Login with existing account")
+            print("3. See a college student success story")
+            print("4. Connect with a registered member")
+            userselect = int(input("Select your option: "))
+            print("\n")
+
+            # If user select invalid option, ask to select again
+            while(userselect != 1 and userselect != 2 and userselect != 3 and userselect != 4):
+                print("Invalid Input")
+                print("1. Create new ")
+                print("2. Login with existing account")
+                print("3. See a college student success story")
+                print("4. Connect with a registered member")
+                userselect = int(("Please select your option again (1 or 2 or 3 or 4): "))
+                print("\n")
+
+            #Create new account 
+            if(userselect == 1):
+                b_login.CreateNewAccount()
+
+            #LogIn Process
+            elif(userselect == 2):
+                if(b_login.LogIn()):
+                    userselect = 0 #If LogIn Process is succesful, break out from loop
+                    
+                    #LOGS USER IN
+                    a_login.addOptions(b_login.username) 
+
+                    #a_login.addOptions(b_login.username)
                     break
-            else:
-                break
-        #Ask Secure password
-        while(1):
-            hasCapital = 0
-            hasDigit = 0
-            hasSpecial = 0  
-            print("Create your password")
-            print("Password need to fill the requirements")
-            print("- minimum of 8 characters, maximum of 12 characters")
-            print("- at least one capital letter")
-            print("- at least one digit")
-            print("- at least one special character")
-            password = input("Input your password: ")
-            
-            #Indentify the password is secure or not
-            #Password Length
-            if(len(password) < MIN_PASSWORD_LENGTH or len(password) > MAX_PASSWORD_LENGTH):
-                print("invalid password")
+                    
+            #Show Success Story and Provide the option to see the video
+            elif(userselect == 3):
+                #Show Success Story
+                b_login.successStory()
+                
+                #Ask whether user want to see video or not
+                print("Next, do you want to watch the video that explains why user should join in InCollege?")
+                watchVideo = int(input("If you want, enter 1, else enter 0: "))
+                #If user enter invalid input, ask again
+                while(watchVideo != 1 and watchVideo != 0):
+                    watchVideo = int(input("Invalid Enter, please enter your option again (0 or 1): "))    
+                
+                if(watchVideo):
+                    print("Video is now playing")
+                    watchVideo = input("If do you want to quit, enter something: ")
+                    print("\n")
+
+            #This allows the user to search for a person using their first and last name, in order to connect with them
+            elif(userselect == 4):
+                userJoinNum = b_login.connectPeople()
+                #User wants to log in
+                if (userJoinNum == 1):
+                    #If LogIn Process is succesful, break out from loop
+                    if(b_login.LogIn()):
+                        userselect = 0 
+
+                #User wants to sign up for an account
+                elif userJoinNum == 2:
+                    b_login.CreateNewAccount()
                 continue
-            
-            #Password Letters
-            for i in password:
-                if(i.isupper()):
-                    hasCapital = 1
-                elif(i.isdigit()):
-                    hasDigit = 1
-                elif any(c in special_characters for c in i):
-                    hasSpecial = 1
-            
-            if(hasCapital and hasDigit and hasSpecial):
-                account[username] = password
-                print("Your account created successful!")
-                return 1
-            else:
-                print("Invalid password")
-        
 
-#The function that log in with existing account
-#When succeed LogIn return 1, else return 0
-def LogIn():
-    username = input("Input your Username: ")
-    password = input("Input your Password: ")
-    for name, pw in account.items():
-        if(name == username):
-            if(pw == password):
-                print("Login was successful!")
-                return 1
-    else:
-        print("Login was failed.")
-        return 0
-            
-    
-#The fuction that is called after a successful login
-def Validlogin():
-    #Ask user options
-    print("1. Search for a Job.")
-    print("2. Find someone you know.")
-    print("3. Learn a new skill.")
-    loginoption = int(input("Select an option: "))
-
-    if (loginoption == 1):
-        print("under construction.")
-    elif (loginoption == 2):
-        print("under construction.")
-    elif (loginoption == 3):
-        skills()
-
-#Function that displays avaliable skills for the user to learn
-def skills():
-    #User options
-    print("Choose a skill you want to learn!")
-    print("1. Data analysis")
-    print("2. Web development")
-    print("3. Programming")
-    print("4. Cloud skill")
-    print("5. Git")
-    print("Press '0' to exit")
-
-    choice = int(input("Select a skill: "))
-
-    #Loop ensures the user enters a valid choice
-    while (choice < 0 and choice > 5):
-        print("Invalid choice")
-        print("Choose a skill you want to learn!")
-        print("1. Data analysis")
-        print("2. Web development")
-        print("3. Programming")
-        print("4. Cloud skill")
-        print("5. Git")
-        print("Press '0' to exit")
-        print(" ")
-
-        choice = input("Select a skill: ")
-
-    if (choice == 1):
-        print("under construction")
-    elif (choice == 2):
-        print("under construction")
-    elif (choice == 3):
-        print("under construction")
-    elif (choice == 4):
-        print("under construction")
-    elif (choice == 5):
-        print("under construction")
-    elif (choice == 0):
-        Validlogin()
+    elif selection == 2:
+        print("We're here to help")
+    elif selection == 3:
+        print("InCollege: Welcome to InCollege, the world's largest college student network with many users in many countries and territories worldwide")
+    elif selection == 4:
+        print("InCollege Pressroom: Stay on top of the latest news, updates, and reports")
+    elif selection in range(5, 8):
+        print("Under construction")
 
 '''
 Main Function
 '''
-print("Welcome to InCollege")
 
 userselect = 1
-#Loop until user can login
-while(userselect != 0):
-    #Ask user select
-    print("1. Create new account")
-    print("2. Login with existing account")
-    userselect = int(input("Select your option: "))
 
-    #If user select invalid option, ask to select again
-    while(userselect != 1 and userselect != 2):
-        print("Invalid Input")
-        print("1. Create new account")
-        print("2. Login with existing account")
-        userselect = int(("Please select your option again: "))
-        
-    #Create new account 
-    if(userselect == 1):
-        CreateNewAccount()
-    #LogIn Process
-    if(userselect == 2):
-        if(LogIn()):
-            userselect = 0 #If LogIn Process is successed, break out from loop
+print("Welcome to InCollege")
 
+while True:
+    # Display the main meny and get the user selection
+    displayLinks()
+    userselect = b_login.inputValidation("Select your options: ", [0,1,2,3,4,5])
 
-#After Login
-Validlogin()
-                
-    
-
-
+    if userselect == 0:
+        # Exit the program
+        print("Exiting...")
+        break
+    elif userselect == 1:
+        # Display te general links menu
+        displayGeneralLinks()
+        general_selection = b_login.inputValidation("Select an option: ", list(range(8)))
+        if general_selection == 0:
+            continue
+        handle_general_link_selection(general_selection)
+        break
+    #When Important InCollege Links gets chosen
+    elif userselect == 5:
+        goingBack = b_login.handleImportantLinks()
+        #Checks if the user wants to come back to main screen after clicking InCollege Important Links
+        if goingBack == 0:
+            continue
+        else:
+            break
+    else:
+        print("Under construction")   
+        break
