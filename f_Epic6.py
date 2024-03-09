@@ -31,10 +31,14 @@ def applyForJob(username, jobPostings, jobNumber):
     return 1
     
 def saveJob(username, jobPostings, jobNumber):
-    jobPostings[jobNumber]["saved_by"]["savedUser"].append(username)
-    print("You saved the job!")
-    
-    # Save the updated job postings
-    np.save("job_postings.npy", jobPostings)
-    
-    return 1
+    if username in jobPostings[jobNumber]["saved_by"]["savedUser"]:
+        print("you already saved the job")
+        return 0
+    else:
+        jobPostings[jobNumber]["saved_by"]["savedUser"].append(username)
+        print("You saved the job!")
+        
+        # Save the updated job postings
+        np.save("job_postings.npy", jobPostings)
+        
+        return 1
