@@ -7,6 +7,7 @@ Import
 import numpy as np
 import f_BeforeLogin as b_login
 from f_BeforeLogin import accounts
+import f_Epic6 as epic6
 
 
 '''
@@ -37,12 +38,46 @@ def addOptions(username):
 
     if choiceJob == "1":
       # Load job postings for searching
-      loadJobPostings()
-      print("Here are the available job postings:")
-      for index, job in enumerate(jobPostings, start=1):
-        print(
-            f"Job {index}: {job['title']} - {job['description']} - {job['employer']} - {job['location']} - {job['salary']}"
-        )
+      while(1):
+        loadJobPostings()
+        print("\nHere are the available job postings:")
+        for index, job in enumerate(jobPostings, start=0):
+          print(
+              f"Job {index + 1}: {job['title']}"
+          )
+        # Ask user to choose the choice  
+        jobNumber = int(input("Choose the job number you want to see the details (If you want to quit the Job Posting list, enter 0): "))
+        while(len(jobPostings) < jobNumber | jobNumber < 0):
+          jobNumber = int(input("Invalid Input, Choose the job you want to see the details: "))
+        #If user choose 0, return to the Option list for AfterLogin
+        if(jobNumber == 0):
+          addOptions(username)
+          return 1
+        #Show the details of the selected job
+        else:
+          jobNumber = jobNumber - 1
+          print("\nThat's the details of the job")
+          print(f"Title: {jobPostings[jobNumber]['title']}")
+          print(f"Description: {jobPostings[jobNumber]['description']}")
+          print(f"Employer: {jobPostings[jobNumber]['employer']}") 
+          print(f"Location: {jobPostings[jobNumber]['location']}")
+          print(f"Salary: {jobPostings[jobNumber]['salary']}\n")
+          
+          print("1: Apply for a job")
+          print("2: Save the job and Return to the list of job posting")
+          print("3: Return to the list of job posting")
+
+          userSelect = int(input("Choose your option: "))
+          while(userSelect < 1 | userSelect > 3):
+            userSelect = int(input("Invalid Input, Choose your option: "))
+          if(userSelect == 1):
+            print("")
+            epic6.applyForJob(username, jobPostings, jobNumber)
+          elif(userSelect == 2):
+            print("")
+            epic6.saveJob(username, jobPostings, jobNumber)
+          print("")
+          print("Returning to the list of Job Posting...")
 
     elif choiceJob == "2":
       postJob(username)
@@ -110,7 +145,7 @@ def addOptions(username):
 # Function to post a job
 def postJob(username):
   jobPostings = loadJobPostings()
-  if len(jobPostings) >= 5:
+  if len(jobPostings) > 10:
     print("Maximum number of job postings reached.")
     return 0
 
@@ -127,7 +162,9 @@ def postJob(username):
       "employer": employer,
       "location": location,
       "salary": salary,
-      "posted_by": username
+      "posted_by": username,
+      "applied_by": {"appliedUser":[], "graduationDate":[], "startWorkingDate":[], "reason":[]}, #The Directionary that store the info about the Applied User
+      "saved_by": {"savedUser":[]}
   }
 
   job = np.array(job)  #Converts job to a numpy array
