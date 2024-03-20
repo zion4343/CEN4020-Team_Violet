@@ -1,0 +1,37 @@
+commit c50451a3f5a53850f9fd0fe070fad8ed93f76e39
+Author: MM-nim <pfrancis1@usf.edu>
+Date:   Tue Mar 19 23:13:29 2024 -0400
+
+    Fixed bugs
+
+commit d85185e6bba0751fe5f1e32369a4cf032c290c6e
+Author: Hyelampa <61427233+lampi12@users.noreply.github.com>
+Date:   Mon Mar 18 22:28:01 2024 -0400
+
+    Add files via upload
+
+commit 58fb4b90a05a6ac87e91e40c75d1d83835f4a420
+Author: Hyelampa <61427233+lampi12@users.noreply.github.com>
+Date:   Tue Mar 5 22:13:38 2024 -0500
+
+    Add files via upload
+
+commit 2d35bd69b0a4e5a58b4e80d40d933f5a7c1bc0ba
+Author: Hyelampa <61427233+lampi12@users.noreply.github.com>
+Date:   Tue Feb 6 02:08:34 2024 -0500
+
+    main.py
+    
+    I made all the post Login stuff. We should be able to submit this for the Login 1
+
+commit 89758465fa084580465500c976109089d92fe235
+Author: Jion Iwasaki <iwasaki@usf.edu>
+Date:   Sun Feb 4 15:41:51 2024 -0500
+
+    Made LogIn System
+
+commit 621007467f9026a45c112186ca9ed2aa0172e669
+Author: Jion Iwasaki <96575300+zion4343@users.noreply.github.com>
+Date:   Sun Feb 4 14:17:41 2024 -0500
+
+    Create main.py
