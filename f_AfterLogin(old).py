@@ -8,6 +8,8 @@ import numpy as np
 import f_BeforeLogin as b_login
 from f_BeforeLogin import accounts
 import f_Epic6 as epic6
+
+
 '''
 Functions
 '''
@@ -24,7 +26,11 @@ def addOptions(username):
   print("4. InCollege Important Links")
   print("5. Manage friend requests")
   print("6. Create your Personal Profile")
+  print("7. Remove Job")
   print("\n")
+  # check for deleted jobs user applied for 
+  checkDeletedJobs(username)
+
   choice = input("Enter your choice: ")
 
   if choice == "1":
@@ -36,23 +42,19 @@ def addOptions(username):
 
     if choiceJob == "1":
       # Load job postings for searching
-      while (1):
+      while(1):
         loadJobPostings()
         print("\nHere are the available job postings:")
         for index, job in enumerate(jobPostings, start=0):
-          print(f"Job {index + 1}: {job['title']}")
-        # Ask user to choose the choice
-        jobNumber = int(
-            input(
-                "Choose the job number you want to see the details (If you want to quit the Job Posting list, enter 0): "
-            ))
-        while (len(jobPostings) < jobNumber | jobNumber < 0):
-          jobNumber = int(
-              input(
-                  "Invalid Input, Choose the job you want to see the details: "
-              ))
+          print(
+              f"Job {index + 1}: {job['title']}"
+          )
+        # Ask user to choose the choice  
+        jobNumber = int(input("Choose the job number you want to see the details (If you want to quit the Job Posting list, enter 0): "))
+        while(len(jobPostings) < jobNumber | jobNumber < 0):
+          jobNumber = int(input("Invalid Input, Choose the job you want to see the details: "))
         #If user choose 0, return to the Option list for AfterLogin
-        if (jobNumber == 0):
+        if(jobNumber == 0):
           addOptions(username)
           return 1
         #Show the details of the selected job
@@ -61,41 +63,25 @@ def addOptions(username):
           print("\nThat's the details of the job")
           print(f"Title: {jobPostings[jobNumber]['title']}")
           print(f"Description: {jobPostings[jobNumber]['description']}")
-          print(f"Employer: {jobPostings[jobNumber]['employer']}")
+          print(f"Employer: {jobPostings[jobNumber]['employer']}") 
           print(f"Location: {jobPostings[jobNumber]['location']}")
           print(f"Salary: {jobPostings[jobNumber]['salary']}\n")
-
+          
           print("1: Apply for a job")
           print("2: Save the job and Return to the list of job posting")
           print("3: Return to the list of job posting")
-          print("4: Applied Jobs")
-          print("5: Jobs not applied")
-          print("6: View/Edit Saved Jobs")
 
           userSelect = int(input("Choose your option: "))
-          while (userSelect < 1):
+          while(userSelect < 1 | userSelect > 3):
             userSelect = int(input("Invalid Input, Choose your option: "))
-
-          if (userSelect == 1):
+          if(userSelect == 1):
             print("")
             epic6.applyForJob(username, jobPostings, jobNumber)
-
-          elif (userSelect == 2):
+          elif(userSelect == 2):
             print("")
             epic6.saveJob(username, jobPostings, jobNumber)
-
-          elif (userSelect == 3):
-            print("Returning to the list of Job Posting...")
-            return 1
-
-          elif (userSelect == 4):
-            epic6.appliedJobs(username, jobPostings, jobNumber)
-
-          elif (userSelect == 5):
-            epic6.notAppliedJobs(username, jobPostings, jobNumber)
-
-          elif (userSelect == 6):
-            epic6.savedJobs(username, jobPostings, jobNumber)
+          print("")
+          print("Returning to the list of Job Posting...")
 
     elif choiceJob == "2":
       postJob(username)
@@ -105,39 +91,39 @@ def addOptions(username):
     searchAndConnect(username)
 
   elif choice == "3":
-    print("Here are 5 skills you can learn:")
-    print("1. Programming")
-    print("2. Prompt Engineering")
-    print("3. 3D Modeling & Simulation")
-    print("4. Data Analysis")
-    print("5. Language Learning")
-    print("6. Show my Network")
-    print("7. Return to the previous level. . .")
+      print("Here are 5 skills you can learn:")
+      print("1. Programming")
+      print("2. Prompt Engineering")
+      print("3. 3D Modeling & Simulation")
+      print("4. Data Analysis")
+      print("5. Language Learning")
+      print("6. Show my Network")
+      print("7. Return to the previous level. . .")
 
-    #Presents the user with the option to choose a skill
-    choiceSkill = input("Enter your skill choice: ")
+      #Presents the user with the option to choose a skill
+      choiceSkill = input("Enter your skill choice: ")
 
-    if choiceSkill == "1":
-      print("The Programming option is currently under construction.")
+      if choiceSkill == "1":
+        print("The Programming option is currently under construction.")
 
-    elif choiceSkill == "2":
-      print("The Prompt Engineering option is currently under construction.")
+      elif choiceSkill == "2":
+        print("The Prompt Engineering option is currently under construction.")
 
-    elif choiceSkill == "3":
-      print(
+      elif choiceSkill == "3":
+        print(
           "The 3D Modeling & Simulation option is currently under construction."
-      )
+        )
 
-    elif choiceSkill == "4":
-      print("The Data Analysis option is currently under construction.")
+      elif choiceSkill == "4":
+        print("The Data Analysis option is currently under construction.")
 
-    elif choiceSkill == "5":
-      print("The Language Learning option is currently under construction.")
-    elif choiceSkill == "6":
-      showMyNetwork(username)
-    else:
-      print("7. Returning to the previous level. . .")
-      addOptions(username)
+      elif choiceSkill == "5":
+        print("The Language Learning option is currently under construction.")
+      elif choiceSkill == "6":
+        showMyNetwork(username)
+      else:
+          print("7. Returning to the previous level. . .")
+          addOptions(username)
 
   elif choice == "4":
     goingBackLoggedIn = handleImportantLinks(username)
@@ -151,15 +137,108 @@ def addOptions(username):
 
   elif choice == "5":
     manageFriendRequests(username)
-
+    
   elif choice == "6":
-    createProfile(username)
+      createProfile(username)
+  elif choice == "7":
+     removeJob(username)
   else:
     print("Invalid choice.")
     addOptions(username)
 
   return 1
 
+def checkDeletedJobs(username):
+   applied_jobs = loadAppliedJobs()
+
+   if username in applied_jobs:
+      for applied_job in applied_jobs[username]:
+         job_id = applied_job["job_id"]
+         job_title = applied_job["job_title"]
+         jobPostings = loadJobPostings()
+         job_exists = any(int(job["job_id"]) == int(job_id) for  job in jobPostings)
+         if not job_exists:
+            print(f"A Job you applied for ({job_title}, Job ID: {job_id}) has been deleted.")
+            print("")
+            removeAppliedJob(username, job_id) # Remove the applied job after notification 
+
+def removeAppliedJob(username, job_id):
+   applied_jobs = loadAppliedJobs()
+   if username in applied_jobs:
+      for i, applied_job in enumerate(applied_jobs[username]):
+         if applied_job["job_id"] == job_id:
+            del applied_jobs[username][i]
+            saveAppliedJobs(applied_jobs)
+            break
+
+def removeJob(username):
+   jobPostings = loadJobPostings()
+   print("Jobs posted by you: ")
+   for job in jobPostings:
+      if job["posted_by"] == username:
+         print(f"Job ID: {job['job_id']}, Title: {job['title']}")
+
+   job_id = input("Enter the job ID to delete: ")
+   
+   found = False
+   for i, job in enumerate(jobPostings):
+      if job["posted_by"] == username and str(job["job_id"]) == job_id:
+         found = True
+         #Remove notifications for applied users
+         applied_users = job["applied_by"]["appliedUser"]
+         for user in applied_users:
+            saveAppliedJob(user, job_id,job["title"])
+            #removeNotification(user, job_id)
+         jobPostings = np.delete(jobPostings, i) #Delete the job from this array
+         saveJobPostings(jobPostings)
+         print("Job deleted successfully.")
+         break
+      
+   if not found:
+         print("Job not found or you are not the owner.")
+
+def saveAppliedJob(username, job_id, job_title):
+   applied_jobs = loadAppliedJobs()
+   if username not in applied_jobs:
+      applied_jobs[username] = []
+   applied_jobs[username].append({"job_id": job_id, "job_title": job_title})
+   saveAppliedJobs(applied_jobs)
+   
+   
+
+def loadAppliedJobs():
+   try:
+      applied_jobs = np.load("applied_jobs.npy", allow_pickle=True).item()
+   except FileNotFoundError:
+      applied_jobs = {}
+   return applied_jobs
+
+def saveAppliedJobs(applied_jobs):
+   np.save("applied_jobs.npy", applied_jobs)
+
+def removeNotification(username, job_id):
+   jobPostings = loadJobPostings()
+   found = False
+   for job in jobPostings:
+      if job["job_id"] == job_id:
+         found = True
+         if username in job["applied_by"]["appliedUser"]:
+            print(f"A Job you applied for (Job ID: {job_id}) has been deleted.")
+         break
+
+   if not found:
+         print(f"A Job you applied for (Job ID: {job_id}) has been deleted.")
+
+def getUserAppliedJobs(username):
+   jobPostings = loadJobPostings()
+   applied_jobs = {}
+   for job in jobPostings:
+      if username in job["applied_by"]["appliedUser"]:
+         applied_jobs[job["job_id"]] = job["title"]
+   return applied_jobs
+
+def saveJobPostings(jobPostings):
+   np.save("job_postings.npy", jobPostings)
 
 # Function to post a job
 def postJob(username):
@@ -175,24 +254,21 @@ def postJob(username):
   location = input("Enter job location: ")
   salary = input("Enter job salary: ")
 
+	#Generate unique job ID
+  job_id = len(jobPostings) + 1
+
   job = {
+		"job_id": job_id,
       "title": title,
       "description": description,
       "employer": employer,
       "location": location,
       "salary": salary,
       "posted_by": username,
-      "applied_by": {
-          "appliedUser": [],
-          "graduationDate": [],
-          "startWorkingDate": [],
-          "reason": []
-      },  #The Directionary that store the info about the Applied User
-      "saved_by": {
-          "savedUser": []
-      }
+      "applied_by": {"appliedUser":[], "graduationDate":[], "startWorkingDate":[], "reason":[]}, #The Directionary that store the info about the Applied User
+      "saved_by": {"savedUser":[]}
   }
-
+  
   job = np.array(job)  #Converts job to a numpy array
   jobPostings = np.concatenate((jobPostings, np.expand_dims(job, axis=0)),
                                axis=0)  #Concatenates job array
@@ -556,295 +632,267 @@ def handleImportantLinks(username):
 
   return back
 
-
 # Function searches for a user based on either last name, major or university and allows user to connect
 # with the user if found
 def searchAndConnect(username):
-  # Read the dictionary of user information
-  b_login.readDictionary()
+    # Read the dictionary of user information
+    b_login.readDictionary()
 
-  # Prompt the user to choose the search criteria
-  print("Search for a user by:")
-  print("1. Last Name")
-  print("2. Major")
-  print("3. University")
+    # Prompt the user to choose the search criteria
+    print("Search for a user by:")
+    print("1. Last Name")
+    print("2. Major")
+    print("3. University")
+    
+    search_criteria = input("Enter your choice: ")
 
-  search_criteria = input("Enter your choice: ")
-
-  if search_criteria == "1":
-    # Search by last name
-    last_name = input(
-        "Enter the last name of the user you want to connect with: ")
-    matching_users = findUsersByLastName(last_name)
-  elif search_criteria == "2":
-    # Search by major
-    major = input("Enter the major of the user you want to connect with: ")
-    matching_users = findUsersByMajor(major, username)
-  elif search_criteria == "3":
-    # Search by university
-    university = input(
-        "Enter the university of the user you want to connect with: ")
-    matching_users = findUsersByUniversity(university, username)
-  else:
-    print("Invalid choice.")
-    return
-
-  # If no matching users found, inform the user and return
-  if not matching_users:
-    print("No users found with the provided criteria.")
-    return
-
-  # Display matching users and prompt the user to select a user to send a friend request
-  print("Matching Users:")
-  # Number the users so that current user is able to choose from the list of matching users
-  for index, user in enumerate(matching_users, start=1):
-    print(f"{index}. {user}")
-
-  # Prompt the user to select a user to send a friend request to
-  selection = input(
-      "Enter the number of the user you want to send a friend request to (0 to cancel): "
-  )
-  if selection.isdigit():
-    selection = int(selection)
-    if 0 < selection <= len(matching_users):
-      selected_user = matching_users[selection - 1]
-      sendFriendRequest(username, selected_user)
-      print(f"Friend request sent to {selected_user}.")
-    elif selection == 0:
-      print("Operation cancelled.")
+    if search_criteria == "1":
+        # Search by last name
+        last_name = input("Enter the last name of the user you want to connect with: ")
+        matching_users = findUsersByLastName(last_name)
+    elif search_criteria == "2":
+        # Search by major
+        major = input("Enter the major of the user you want to connect with: ")
+        matching_users = findUsersByMajor(major,username)
+    elif search_criteria == "3":
+        # Search by university
+        university = input("Enter the university of the user you want to connect with: ")
+        matching_users = findUsersByUniversity(university,username)
     else:
-      print("Invalid selection.")
-  else:
-    print("Invalid input.")
+        print("Invalid choice.")
+        return
 
+    # If no matching users found, inform the user and return
+    if not matching_users:
+        print("No users found with the provided criteria.")
+        return
 
+    # Display matching users and prompt the user to select a user to send a friend request
+    print("Matching Users:")
+    # Number the users so that current user is able to choose from the list of matching users
+    for index, user in enumerate(matching_users, start=1):
+        print(f"{index}. {user}")
+
+    # Prompt the user to select a user to send a friend request to
+    selection = input("Enter the number of the user you want to send a friend request to (0 to cancel): ")
+    if selection.isdigit():
+        selection = int(selection)
+        if 0 < selection <= len(matching_users):
+            selected_user = matching_users[selection - 1]
+            sendFriendRequest(username, selected_user)
+            print(f"Friend request sent to {selected_user}.")
+        elif selection == 0:
+            print("Operation cancelled.")
+        else:
+            print("Invalid selection.")
+    else:
+        print("Invalid input.")
+       
 # Function to find users by last name
 def findUsersByLastName(last_name):
-  # Load the full names and usernames from the file
-  try:
-    fullnames = np.load("fullnames.npy", allow_pickle=True).item()
-  except FileNotFoundError:
-    print("Error: Fullnames file not found.")
-    return []
+    # Load the full names and usernames from the file
+    try:
+        fullnames = np.load("fullnames.npy", allow_pickle=True).item()
+    except FileNotFoundError:
+        print("Error: Fullnames file not found.")
+        return []
 
-  # Search for users based on the last name
-  matching_users = []
-  for user, fullname in fullnames.items():
-    # Check if the last name matches
-    if last_name.lower() in fullname.lower():
-      matching_users.append(user)
+    # Search for users based on the last name
+    matching_users = []
+    for user, fullname in fullnames.items():
+        # Check if the last name matches
+        if last_name.lower() in fullname.lower():
+            matching_users.append(user)
 
-  return matching_users
-
+    return matching_users
 
 # Function to find users by major
-def findUsersByMajor(major, current_username):
-  #Load the accounts data from .npy file
-  accounts = np.load('accounts.npy', allow_pickle=True).item()
+def findUsersByMajor(major,current_username):
+    #Load the accounts data from .npy file
+    accounts = np.load('accounts.npy', allow_pickle=True).item()
+    
+    # Search for users by major, excluding the current user
+    matching_users_full_names = [
+        details['full_name'] for username, details in accounts.items() 
+        if details['major'].lower() == major.lower() and username != current_username
+    ]
+    
+    return matching_users_full_names
 
-  # Search for users by major, excluding the current user
-  matching_users_full_names = [
-      details['full_name'] for username, details in accounts.items()
-      if details['major'].lower() == major.lower()
-      and username != current_username
-  ]
-
-  return matching_users_full_names
-
-
-# Function to find users by university
-def findUsersByUniversity(university, current_username):
-  #Load the accounts data from .npy file
-  accounts = np.load('accounts.npy', allow_pickle=True).item()
-
-  # Search for users by major, excluding the current user
-  matching_users_full_names = [
-      details['full_name'] for username, details in accounts.items()
-      if details['university'].lower() == university.lower()
-      and username != current_username
-  ]
-
-  return matching_users_full_names
-
+# Function to find users by university 
+def findUsersByUniversity(university,current_username):
+    #Load the accounts data from .npy file
+    accounts = np.load('accounts.npy', allow_pickle=True).item()
+    
+    # Search for users by major, excluding the current user
+    matching_users_full_names = [
+        details['full_name'] for username, details in accounts.items() 
+        if details['university'].lower() == university.lower() and username != current_username
+    ]
+    
+    return matching_users_full_names
 
 # Finding which user is currently logged in
 def getLoggedInUserFullName():
-  # Ensure that the 'username' variable is accessible within this function
-  global username
+    # Ensure that the 'username' variable is accessible within this function
+    global username
 
-  # Check if the 'username' variable is defined and not empty
-  if 'username' in globals() and username in accounts:
-    return accounts[username]['full_name']
-  else:
-    return "No user is currently logged in."
+    # Check if the 'username' variable is defined and not empty
+    if 'username' in globals() and username in accounts:
+        return accounts[username]['full_name']
+    else:
+        return "No user is currently logged in."
 
 
 # Function to send a friend request to another user
 def sendFriendRequest(sender_username, receiver_fullname):
-  # Load the accounts dictionary
-  try:
-    accounts = np.load("accounts.npy", allow_pickle=True).item()
-  except FileNotFoundError:
-    print(
-        "Accounts file not found. Make sure you have run the account creation process."
-    )
-    return
+    # Load the accounts dictionary
+    try:
+        accounts = np.load("accounts.npy", allow_pickle=True).item()
+    except FileNotFoundError:
+        print("Accounts file not found. Make sure you have run the account creation process.")
+        return
 
-  # Debug print to check the loaded accounts structure
-  #print("Loaded accounts:", accounts)
+    # Debug print to check the loaded accounts structure
+    #print("Loaded accounts:", accounts)
 
-  # Retrieve the actual username using the full name
-  receiver_username = None
-  for username, details in accounts.items():
-    # Use the 'full_name' key for comparison
-    if details['full_name'].lower().strip() == receiver_fullname.lower().strip(
-    ):
-      receiver_username = username
-      break
+    # Retrieve the actual username using the full name
+    receiver_username = None
+    for username, details in accounts.items():
+        # Use the 'full_name' key for comparison
+        if details['full_name'].lower().strip() == receiver_fullname.lower().strip():
+            receiver_username = username
+            break
 
-  if receiver_username is None:
-    print("Receiver not found. Make sure the full name is correct.")
-    return
 
-  # Continue with the friend request process using receiver_username...
+    if receiver_username is None:
+        print("Receiver not found. Make sure the full name is correct.")
+        return
 
-  # Construct the file name for receiver's pending friend requests
-  file_name = f"{receiver_username}_friend_requests.npy"
+    # Continue with the friend request process using receiver_username...
 
-  try:
-    # Load existing friend requests if file exists
-    existing_requests = np.load(file_name, allow_pickle=True).tolist()
-  except FileNotFoundError:
-    # If file does not exist, start with an empty list
-    existing_requests = []
 
-  # Add the new friend request
-  existing_requests.append({"Sender": sender_username, "Status": "Pending"})
+    # Construct the file name for receiver's pending friend requests
+    file_name = f"{receiver_username}_friend_requests.npy"
+    
+    try:
+        # Load existing friend requests if file exists
+        existing_requests = np.load(file_name, allow_pickle=True).tolist()
+    except FileNotFoundError:
+        # If file does not exist, start with an empty list
+        existing_requests = []
+    
+    # Add the new friend request
+    existing_requests.append({"Sender": sender_username, "Status": "Pending"})
+    
+    # Save the updated list back to the file
+    np.save(file_name, existing_requests)
 
-  # Save the updated list back to the file
-  np.save(file_name, existing_requests)
-
-  # print(f"Friend request sent to {receiver_username}.")
+    # print(f"Friend request sent to {receiver_username}.")
 
 
 def manageFriendRequests(username):
-  # Load pending friend requests
-  try:
-    pending_requests = np.load(f"{username}_friend_requests.npy",
-                               allow_pickle=True).tolist()
-  except FileNotFoundError:
-    pending_requests = []
+    # Load pending friend requests
+    try:
+        pending_requests = np.load(f"{username}_friend_requests.npy", allow_pickle=True).tolist()
+    except FileNotFoundError:
+        pending_requests = []
 
-  # Check if there are pending requests
-  if len(pending_requests) > 0:
-    print("Pending Friend Requests:")
-    for index, request in enumerate(pending_requests, start=1):
-      # Display each request with a number
-      print(
-          f"{index}. Sender: {request['Sender']}, Status: {request['Status']}")
+    # Check if there are pending requests
+    if len(pending_requests) > 0:
+        print("Pending Friend Requests:")
+        for index, request in enumerate(pending_requests, start=1):
+            # Display each request with a number
+            print(f"{index}. Sender: {request['Sender']}, Status: {request['Status']}")
 
-    # Prompt the user to choose a request to accept or reject
-    user_choice = input(
-        "Enter the number of the friend request you want to respond to (or type 'cancel' to exit): "
-    )
-
-    # Validate user input
-    if user_choice.isdigit():
-      choice_index = int(user_choice) - 1
-      if 0 <= choice_index < len(pending_requests):
-        # Further prompt for accept or reject
-        action = input(
-            "Do you want to accept (A) or reject (R) this friend request?: "
-        ).upper()
-        if action == "A":
-          # Call function to accept friend request
-          accept_friend_request(username,
-                                pending_requests[choice_index]['Sender'])
-
-        elif action == "R":
-          # Simply remove the request from the list to "reject" it
-          del pending_requests[choice_index]
-          print("Friend request rejected.")
-          # Save the updated list of pending requests back to the file
-          np.save(f"{username}_friend_requests.npy",
-                  np.array(pending_requests, dtype=object))
+        # Prompt the user to choose a request to accept or reject
+        user_choice = input("Enter the number of the friend request you want to respond to (or type 'cancel' to exit): ")
+        
+        # Validate user input
+        if user_choice.isdigit():
+            choice_index = int(user_choice) - 1
+            if 0 <= choice_index < len(pending_requests):
+                # Further prompt for accept or reject
+                action = input("Do you want to accept (A) or reject (R) this friend request?: ").upper()
+                if action == "A":
+                    # Call function to accept friend request
+                    accept_friend_request(username, pending_requests[choice_index]['Sender'])
+                    
+                elif action == "R":
+                    # Simply remove the request from the list to "reject" it
+                    del pending_requests[choice_index]
+                    print("Friend request rejected.")
+                    # Save the updated list of pending requests back to the file
+                    np.save(f"{username}_friend_requests.npy", np.array(pending_requests, dtype=object))
+                else:
+                    print("Invalid choice. Please enter 'A' to accept or 'R' to reject.")
+            else:
+                print("Invalid selection. Please enter a valid request number.")
+        elif user_choice.lower() == 'cancel':
+            print("Operation cancelled.")
         else:
-          print("Invalid choice. Please enter 'A' to accept or 'R' to reject.")
-      else:
-        print("Invalid selection. Please enter a valid request number.")
-    elif user_choice.lower() == 'cancel':
-      print("Operation cancelled.")
+            print("Invalid input. Please enter a number or 'cancel' to exit.")
     else:
-      print("Invalid input. Please enter a number or 'cancel' to exit.")
-  else:
-    print("No pending friend requests.")
+        print("No pending friend requests.")
 
 
-def accept_friend_request(user_receiving, user_requesting):
-  accounts = np.load('accounts.npy', allow_pickle=True).item()
-
-  # Add user_requesting to user_receiving's friends list
-  if user_requesting not in accounts[user_receiving]['friends']:
-    accounts[user_receiving]['friends'].append(user_requesting)
-
-  # Add user_receiving to user_requesting's friends list
-  if user_receiving not in accounts[user_requesting]['friends']:
-    accounts[user_requesting]['friends'].append(user_receiving)
-
-  # Save the updated accounts back to the file
-  np.save('accounts.npy', accounts)
-
-
-# Function to show a user's list of friends
-def showMyNetwork(username):
-  accounts = np.load('accounts.npy', allow_pickle=True).item()
-
-  if username in accounts and 'friends' in accounts[username]:
-    friends_list = accounts[username]['friends']
-    if friends_list:
-      print(f"{username}'s network:")
-      for index, friend_username in enumerate(friends_list, start=1):
-        friend_full_name = accounts[friend_username].get(
-            'full_name', 'No name available')
-        print(f"{index}. {friend_full_name}")
-
-      # Ask if the user wants to disconnect from a friend
-      disconnect_choice = input(
-          "Do you want to disconnect from a friend? Enter the number (or 'n' to skip): "
-      )
-      if disconnect_choice.isdigit():
-        disconnectFromFriend(username, int(disconnect_choice), accounts)
-      elif disconnect_choice.lower() == 'n':
-        print("No changes made to your network.")
-      else:
-        print("Invalid input.")
-    else:
-      print("You haven't connected with anyone yet.")
-  else:
-    print("No friends to show or user not found.")
-
-
-# Function to handle disconnection from friends
-def disconnectFromFriend(username, friend_index, accounts):
-  friends_list = accounts[username].get('friends', [])
-
-  if 1 <= friend_index <= len(friends_list):
-    # Adjust the index since list indices start at 0
-    friend_username = friends_list[friend_index - 1]
-
-    # Remove each user from the other's friend list
-    accounts[username]['friends'].remove(friend_username)
-    accounts[friend_username]['friends'].remove(username)
-
+def accept_friend_request( user_receiving, user_requesting):
+    accounts = np.load('accounts.npy', allow_pickle=True).item()
+    
+    # Add user_requesting to user_receiving's friends list
+    if user_requesting not in accounts[user_receiving]['friends']:
+        accounts[user_receiving]['friends'].append(user_requesting)
+    
+    # Add user_receiving to user_requesting's friends list
+    if user_receiving not in accounts[user_requesting]['friends']:
+        accounts[user_requesting]['friends'].append(user_receiving)
+    
     # Save the updated accounts back to the file
     np.save('accounts.npy', accounts)
 
-    print(
-        f"You have disconnected from {accounts[friend_username].get('full_name', 'a friend')}."
-    )
-  else:
-    print("Invalid selection. No changes made.")
+# Function to show a user's list of friends
+def showMyNetwork(username):
+    accounts = np.load('accounts.npy', allow_pickle=True).item()
+    
+    if username in accounts and 'friends' in accounts[username]:
+        friends_list = accounts[username]['friends']
+        if friends_list:
+            print(f"{username}'s network:")
+            for index, friend_username in enumerate(friends_list, start=1):
+                friend_full_name = accounts[friend_username].get('full_name', 'No name available')
+                print(f"{index}. {friend_full_name}")
+            
+            # Ask if the user wants to disconnect from a friend
+            disconnect_choice = input("Do you want to disconnect from a friend? Enter the number (or 'n' to skip): ")
+            if disconnect_choice.isdigit():
+                disconnectFromFriend(username, int(disconnect_choice), accounts)
+            elif disconnect_choice.lower() == 'n':
+                print("No changes made to your network.")
+            else:
+                print("Invalid input.")
+        else:
+            print("You haven't connected with anyone yet.")
+    else:
+        print("No friends to show or user not found.")
 
+# Function to handle disconnection from friends
+def disconnectFromFriend(username, friend_index, accounts):
+    friends_list = accounts[username].get('friends', [])
+    
+    if 1 <= friend_index <= len(friends_list):
+        # Adjust the index since list indices start at 0
+        friend_username = friends_list[friend_index - 1]
+        
+        # Remove each user from the other's friend list
+        accounts[username]['friends'].remove(friend_username)
+        accounts[friend_username]['friends'].remove(username)
+        
+        # Save the updated accounts back to the file
+        np.save('accounts.npy', accounts)
+        
+        print(f"You have disconnected from {accounts[friend_username].get('full_name', 'a friend')}.")
+    else:
+        print("Invalid selection. No changes made.")
 
 '''
 # Function to find users by last name
@@ -865,7 +913,6 @@ def findUsersByLastName(last_name):
 
     return matching_users
 '''
-
 
 # Function to create or update a personal profile
 def createProfile(username):
@@ -914,16 +961,14 @@ def createProfile(username):
     elif choice == "6":
       addEducation(profile)
     elif choice == "7":
-      displayProfile(profile, username)
-      break
+       displayProfile(profile, username)
+       break
     elif choice == "8":
-      displayFriendsList(username)
-      friend_username = input(
-          "Enter the username of the friend whose profile you want to display: "
-      )
-      print("")
-      displayfriendprofile(username, friend_username)
-      break
+       displayFriendsList(username)
+       friend_username = input("Enter the username of the friend whose profile you want to display: ")
+       print("")
+       displayfriendprofile(username, friend_username)
+       break
     elif choice == "9":
       break
     else:
@@ -948,49 +993,42 @@ def displayProfile(profile, username):
   else:
     print("No profile found.")
 
-
 def displayFriendsList(username):
-  accounts = np.load('accounts.npy', allow_pickle=True).item()
-  if 'friends' in accounts[username]:
-    friends_list = accounts[username]['friends']
-    print("")
-    print("Your Friends:")
-    for friend_username in friends_list:
-      friend_full_name = accounts[friend_username].get('full_name',
-                                                       'No name available')
-      print(
-          f"Username: {friend_username} , Full Name: {friend_full_name} -Profile"
-      )
-  else:
-    print("You don't have any friends.")
+    accounts = np.load('accounts.npy', allow_pickle=True).item()
+    if 'friends' in accounts[username]:
+        friends_list = accounts[username]['friends']
+        print("")
+        print("Your Friends:")
+        for friend_username in friends_list:
+            friend_full_name = accounts[friend_username].get('full_name', 'No name available')
+            print(f"Username: {friend_username} , Full Name: {friend_full_name} -Profile")
+    else:
+        print("You don't have any friends.")
 
 
 def displayfriendprofile(username, friend_username):
-  accounts = np.load('accounts.npy', allow_pickle=True).item()
-  if friend_username in accounts[username]['friends']:
-    friend_full_name = accounts[friend_username].get('full_name',
-                                                     'No name available')
-    #print(f"{friend_username}'s Profile:")
-    print(f"Full Name: {friend_full_name}")
-    # Check if profile file exists for the friend
-    try:
-      friend_profile = np.load(f"{friend_username}_profile.npy",
-                               allow_pickle=True).item()
-      displayProfile(friend_profile, friend_username)
-    except FileNotFoundError:
-      print("No profile found for this friend.")
-  else:
-    print("You are not friends with this person.")
-
-
+    accounts = np.load('accounts.npy', allow_pickle=True).item()  
+    if friend_username in accounts[username]['friends']:
+        friend_full_name = accounts[friend_username].get('full_name', 'No name available')
+        #print(f"{friend_username}'s Profile:")
+        print(f"Full Name: {friend_full_name}")
+        # Check if profile file exists for the friend
+        try:
+            friend_profile = np.load(f"{friend_username}_profile.npy", allow_pickle=True).item()
+            displayProfile(friend_profile, friend_username)
+        except FileNotFoundError:
+            print("No profile found for this friend.")
+    else:
+        print("You are not friends with this person.")
+        
 # Function to handle the option to display a friend's profile
 # def displayFriendProfileOption(username):
 #     # Display user's friends
 #     showMyNetwork(username)
-
+    
 #     # Let the user select a friend's profile
 #     friend_index = int(input("Select a friend's profile (enter the corresponding number): "))
-
+    
 #     # Get the selected friend's username
 #     accounts = np.load('accounts.npy', allow_pickle=True).item()
 #     if username in accounts and 'friends' in accounts[username]:
@@ -1004,8 +1042,9 @@ def displayfriendprofile(username, friend_username):
 #     else:
 #         print("User not found or no friends list available.")
 
+
 # def displayfriendprofile(profile, username):
-#   accounts = np.load('accounts.npy', allow_pickle=True).item()
+#   accounts = np.load('accounts.npy', allow_pickle=True).item()  
 #   if username in accounts and 'friends' in accounts[username]:
 #       friends_list = accounts[username]['friends']
 #       if friends_list:
@@ -1018,14 +1057,13 @@ def displayfriendprofile(username, friend_username):
 #           selected_index = int(input("Select a friend's profile (enter the corresponding number): "))
 #           if 1 <= selected_index <= len(friends_list):
 #               selected_friend_username = friends_list[selected_index - 1]
-#               displayProfile(profile, selected_friend_username)
+#               displayProfile(profile, selected_friend_username)  
 #           else:
 #               print("Invalid selection.")
 #       else:
 #             print("You don't have any friends yet.")
 #   else:
 #         print("User not found or no friends list available.")
-
 
 # Function to add experience
 def addExperience(profile):
