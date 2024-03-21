@@ -53,6 +53,10 @@ def CreateNewAccount():
         print("All permitted accounts have been created, please come back later")
         return 0
     else:
+        #Ask the plus member or not
+        print("Do you apply InCollege+? (Monthly $10)")
+        plus = input("If you want, enter 1. Else enter 0: ")
+        
         #Ask Unique username
         while(1):
             #Stores users' name so they can be searched for by another user
@@ -139,7 +143,8 @@ def CreateNewAccount():
                         'university': university,
                         'last_name': lastName,
                         'full_name': fullname,
-                        'friends': []
+                        'friends': [],
+                        'plus': plus
                     }
                     accFullName[fullname] = username
                     print("Your account was created successfully!")
