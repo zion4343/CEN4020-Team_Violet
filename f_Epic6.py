@@ -6,6 +6,9 @@ Import
 '''
 import numpy as np
 
+'''
+Functions
+'''
 
 def applyForJob(username, jobPostings, jobNumber):
   #student cannot apply for a job that they posted.

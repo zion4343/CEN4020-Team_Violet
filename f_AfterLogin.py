@@ -8,6 +8,7 @@ import numpy as np
 import f_BeforeLogin as b_login
 from f_BeforeLogin import accounts
 import f_Epic6 as epic6
+import f_Epic7 as epic7
 
 
 '''
@@ -26,7 +27,13 @@ def addOptions(username):
   print("4. InCollege Important Links")
   print("5. Manage friend requests")
   print("6. Create your Personal Profile")
+  print("7. Remove Job")
+  print("8. Manage Messages")
   print("\n")
+  
+  #Check for deleted jobs user applied for
+  checkDeletedJobs(username)
+  
   choice = input("Enter your choice: ")
 
   if choice == "1":
@@ -135,10 +142,14 @@ def addOptions(username):
     manageFriendRequests(username)
     
   elif choice == "6":
-      createProfile(username)
+    createProfile(username)
+  elif choice == "7":
+    removeJob(username)
+  elif choice == "8":
+    epic7.manageMessage(username)
   else:
     print("Invalid choice.")
-    addOptions(username)
+    addOptions(username)  
 
   return 1
 
@@ -155,8 +166,11 @@ def postJob(username):
   employer = input("Enter employer name: ")
   location = input("Enter job location: ")
   salary = input("Enter job salary: ")
+  
+  job_id = len(jobPostings) + 1
 
   job = {
+      "job_id": job_id,
       "title": title,
       "description": description,
       "employer": employer,
@@ -985,3 +999,97 @@ def addEducation(profile):
 # Function to format text (capitalize first letter of each word)
 def formatText(text):
   return " ".join(word.capitalize() for word in text.split())
+
+
+#Functions added Epic6 by Lampi
+def checkDeletedJobs(username):
+   applied_jobs = loadAppliedJobs()
+
+   if username in applied_jobs:
+      for applied_job in applied_jobs[username]:
+         job_id = applied_job["job_id"]
+         job_title = applied_job["job_title"]
+         jobPostings = loadJobPostings()
+         job_exists = any(int(job["job_id"]) == int(job_id) for  job in jobPostings)
+         if not job_exists:
+            print(f"A Job you applied for ({job_title}, Job ID: {job_id}) has been deleted.")
+            print("")
+            removeAppliedJob(username, job_id) # Remove the applied job after notification 
+
+def removeAppliedJob(username, job_id):
+   applied_jobs = loadAppliedJobs()
+   if username in applied_jobs:
+      for i, applied_job in enumerate(applied_jobs[username]):
+         if applied_job["job_id"] == job_id:
+            del applied_jobs[username][i]
+            saveAppliedJobs(applied_jobs)
+            break
+
+def removeJob(username):
+   jobPostings = loadJobPostings()
+   print("Jobs posted by you: ")
+   for job in jobPostings:
+      if job["posted_by"] == username:
+         print(f"Job ID: {job['job_id']}, Title: {job['title']}")
+
+   job_id = input("Enter the job ID to delete: ")
+
+   found = False
+   for i, job in enumerate(jobPostings):
+      if job["posted_by"] == username and str(job["job_id"]) == job_id:
+         found = True
+         #Remove notifications for applied users
+         applied_users = job["applied_by"]["appliedUser"]
+         for user in applied_users:
+            saveAppliedJob(user, job_id,job["title"])
+            #removeNotification(user, job_id)
+         jobPostings = np.delete(jobPostings, i) #Delete the job from this array
+         saveJobPostings(jobPostings)
+         print("Job deleted successfully.")
+         break
+
+   if not found:
+         print("Job not found or you are not the owner.")
+
+def saveAppliedJob(username, job_id, job_title):
+   applied_jobs = loadAppliedJobs()
+   if username not in applied_jobs:
+      applied_jobs[username] = []
+   applied_jobs[username].append({"job_id": job_id, "job_title": job_title})
+   saveAppliedJobs(applied_jobs)
+
+
+
+def loadAppliedJobs():
+   try:
+      applied_jobs = np.load("applied_jobs.npy", allow_pickle=True).item()
+   except FileNotFoundError:
+      applied_jobs = {}
+   return applied_jobs
+ 
+def saveAppliedJobs(applied_jobs):
+   np.save("applied_jobs.npy", applied_jobs)
+
+def removeNotification(username, job_id):
+   jobPostings = loadJobPostings()
+   found = False
+   for job in jobPostings:
+      if job["job_id"] == job_id:
+         found = True
+         if username in job["applied_by"]["appliedUser"]:
+            print(f"A Job you applied for (Job ID: {job_id}) has been deleted.")
+         break
+
+   if not found:
+         print(f"A Job you applied for (Job ID: {job_id}) has been deleted.")
+
+def getUserAppliedJobs(username):
+   jobPostings = loadJobPostings()
+   applied_jobs = {}
+   for job in jobPostings:
+      if username in job["applied_by"]["appliedUser"]:
+         applied_jobs[job["job_id"]] = job["title"]
+   return applied_jobs
+
+def saveJobPostings(jobPostings):
+   np.save("job_postings.npy", jobPostings)
