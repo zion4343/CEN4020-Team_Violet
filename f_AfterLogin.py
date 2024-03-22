@@ -92,6 +92,8 @@ def addOptions(username):
   elif choice == "2":
     #print("Find someone you know option is currently under construction.")
     searchAndConnect(username)
+    addOptions(username)
+    return
 
   elif choice == "3":
       print("Here are 5 skills you can learn:")
@@ -107,26 +109,36 @@ def addOptions(username):
       choiceSkill = input("Enter your skill choice: ")
 
       if choiceSkill == "1":
-        print("The Programming option is currently under construction.")
+        print("The Programming option is currently under construction.\n")
+        addOptions(username)
+        return
 
       elif choiceSkill == "2":
-        print("The Prompt Engineering option is currently under construction.")
+        print("The Prompt Engineering option is currently under construction.\n")
+        addOptions(username)
+        return
 
       elif choiceSkill == "3":
-        print(
-          "The 3D Modeling & Simulation option is currently under construction."
-        )
+        print("The 3D Modeling & Simulation option is currently under construction.\n")
+        addOptions(username)
+        return
 
       elif choiceSkill == "4":
-        print("The Data Analysis option is currently under construction.")
+        print("The Data Analysis option is currently under construction.\n")
+        addOptions(username)
 
       elif choiceSkill == "5":
-        print("The Language Learning option is currently under construction.")
+        print("The Language Learning option is currently under construction.\n")
+        addOptions(username)
+        
       elif choiceSkill == "6":
         showMyNetwork(username)
+        addOptions(username)
+        return
+      
       else:
-          print("7. Returning to the previous level. . .")
-          addOptions(username)
+        print("7. Returning to the previous level. . .")
+        addOptions(username)
 
   elif choice == "4":
     goingBackLoggedIn = handleImportantLinks(username)
@@ -140,13 +152,20 @@ def addOptions(username):
 
   elif choice == "5":
     manageFriendRequests(username)
-    
+    addOptions(username)
+      
   elif choice == "6":
     createProfile(username)
+    addOptions(username)
+  
   elif choice == "7":
     removeJob(username)
+    addOptions(username)
+  
   elif choice == "8":
     epic7.manageMessage(username)
+    addOptions(username)
+    
   else:
     print("Invalid choice.")
     addOptions(username)  
