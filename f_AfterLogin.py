@@ -678,6 +678,11 @@ def getLoggedInUserFullName():
 
 #The function to check pending friend request
 def checkPendingFriendRequest(username):
+  loadFriendRequest()
+  NoPendingRequest = len(pending_requests[username])
+  # Check if there are pending requests
+  if (NoPendingRequest) > 0:
+    print("You have pending friend request!")
   return
 
 def loadFriendRequest():
