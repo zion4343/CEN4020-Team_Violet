@@ -41,17 +41,18 @@ def handle_general_link_selection(selection):
             print("2. Login with existing account")
             print("3. See a college student success story")
             print("4. Connect with a registered member")
+            print("0. return previous page")
             userselect = int(input("Select your option: "))
             print("\n")
 
             # If user select invalid option, ask to select again
-            while(userselect != 1 and userselect != 2 and userselect != 3 and userselect != 4):
-                print("Invalid Input")
-                print("1. Create new ")
+            while(userselect != 1 and userselect != 2 and userselect != 3 and userselect != 4 and userselect != 0):
+                print("Invalid Input\n")
+                print("1. Create new account")
                 print("2. Login with existing account")
                 print("3. See a college student success story")
                 print("4. Connect with a registered member")
-                userselect = int(("Please select your option again (1 or 2 or 3 or 4): "))
+                userselect = int(input("Please select your option again (1 or 2 or 3 or 4): "))
                 print("\n")
 
             #Create new account 
@@ -66,7 +67,6 @@ def handle_general_link_selection(selection):
                     #LOGS USER IN
                     a_login.addOptions(b_login.username) 
 
-                    #a_login.addOptions(b_login.username)
                     break
                     
             #Show Success Story and Provide the option to see the video
@@ -98,7 +98,10 @@ def handle_general_link_selection(selection):
                 #User wants to sign up for an account
                 elif userJoinNum == 2:
                     b_login.CreateNewAccount()
-                continue
+                handle_general_link_selection(selection)
+                return 1
+            elif(userselect == 0):
+                return 0
 
     elif selection == 2:
         print("We're here to help")
@@ -128,12 +131,15 @@ while True:
         break
     elif userselect == 1:
         # Display te general links menu
-        displayGeneralLinks()
-        general_selection = b_login.inputValidation("Select an option: ", list(range(8)))
-        if general_selection == 0:
-            continue
-        handle_general_link_selection(general_selection)
-        break
+        while(1):
+            displayGeneralLinks()
+            general_selection = b_login.inputValidation("Select an option: ", list(range(8)))
+            if general_selection == 0:
+                break
+            if (handle_general_link_selection(general_selection) == 0):
+                continue
+            else:
+                exit(1)
     #When Important InCollege Links gets chosen
     elif userselect == 5:
         goingBack = b_login.handleImportantLinks()
@@ -143,5 +149,5 @@ while True:
         else:
             break
     else:
-        print("Under construction")   
-        break
+        print("\nUnder construction")   
+        print("Returning...\n")

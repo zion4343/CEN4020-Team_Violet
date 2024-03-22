@@ -228,7 +228,7 @@ def connectPeople():
     
     else: #When no match is found
         print("\nThey are not yet a part of the InCollege system yet \n")
-        return 1
+        return 
 
 #Verifies if the user is inputting a number in the acceptable range (a more general purpose one needs to be made)
 def inputValidation(prompt, valid_options):
@@ -237,9 +237,9 @@ def inputValidation(prompt, valid_options):
             user_input = int(input(prompt))
             if user_input in valid_options:
                 return user_input
-            print("Invalid input. Please try again.")
+            print("\nInvalid input. Please try again.\n")
         except ValueError:
-            print("Invalid input. Please enter a number.")
+            print("\nInvalid input. Please enter a number.\n")
 
 #Displays all the InCollege Important Links (if 5 is chosen)
 def displayImportantLinks():
