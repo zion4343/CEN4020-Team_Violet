@@ -31,6 +31,8 @@ def addOptions(username):
   print("8. Manage Messages")
   print("\n")
   
+  #Check for the pending friend request
+  checkPendingFriendRequest(username)
   #Check for deleted jobs user applied for
   checkDeletedJobs(username)
   
@@ -674,6 +676,18 @@ def getLoggedInUserFullName():
     else:
         return "No user is currently logged in."
 
+#The function to check pending friend request
+def checkPendingFriendRequest(username):
+  return
+
+def loadFriendRequest():
+  global pending_requests
+  try:
+    pending_requests = np.load("friend_request.npy", allow_pickle = True).item()
+  except FileNotFoundError:
+    pending_requests = {}
+    
+  return pending_requests
 
 # Function to send a friend request to another user
 def sendFriendRequest(sender_username, receiver_fullname):
@@ -701,40 +715,44 @@ def sendFriendRequest(sender_username, receiver_fullname):
         return
 
     # Continue with the friend request process using receiver_username...
-
-
-    # Construct the file name for receiver's pending friend requests
-    file_name = f"{receiver_username}_friend_requests.npy"
     
     try:
         # Load existing friend requests if file exists
-        existing_requests = np.load(file_name, allow_pickle=True).tolist()
+        existing_requests = np.load("friend_request.npy", allow_pickle=True)
     except FileNotFoundError:
-        # If file does not exist, start with an empty list
-        existing_requests = []
+        # If file does not exist, start with an empty dic
+        existing_requests = {}
+        existing_requests[receiver_username] = [{sender_username: "Pending"}]
     
     # Add the new friend request
-    existing_requests.append({"Sender": sender_username, "Status": "Pending"})
+    
+    #existing_requests.append({"Sender": sender_username, "Status": "Pending"})
+    existing_requests[receiver_username].append({sender_username: "Pending"})
     
     # Save the updated list back to the file
-    np.save(file_name, existing_requests)
+    np.save("friend_request.npy", existing_requests)
 
     # print(f"Friend request sent to {receiver_username}.")
 
 
 def manageFriendRequests(username):
     # Load pending friend requests
-    try:
-        pending_requests = np.load(f"{username}_friend_requests.npy", allow_pickle=True).tolist()
-    except FileNotFoundError:
-        pending_requests = []
-
+    loadFriendRequest()
+    
+    senderUsername = []
+    
+    NoPendingRequest = len(pending_requests[username])
     # Check if there are pending requests
-    if len(pending_requests) > 0:
+    if (NoPendingRequest) > 0:
         print("Pending Friend Requests:")
-        for index, request in enumerate(pending_requests, start=1):
-            # Display each request with a number
-            print(f"{index}. Sender: {request['Sender']}, Status: {request['Status']}")
+        list_of_requests = pending_requests[username]
+        # Display each request with a number
+        i = 0
+        while(i < NoPendingRequest):
+          for sender, status in list_of_requests[i].items():
+            print(f"{i+1}. Sender: {sender}, Status: {status}")
+            senderUsername.append(sender)
+            i = i + 1
 
         # Prompt the user to choose a request to accept or reject
         user_choice = input("Enter the number of the friend request you want to respond to (or type 'cancel' to exit): ")
@@ -747,14 +765,19 @@ def manageFriendRequests(username):
                 action = input("Do you want to accept (A) or reject (R) this friend request?: ").upper()
                 if action == "A":
                     # Call function to accept friend request
-                    accept_friend_request(username, pending_requests[choice_index]['Sender'])
+                    #accept_friend_request(username, pending_requests[choice_index]['Sender'])
+                    accept_friend_request(username, senderUsername[choice_index])
+                    pending_requests[username].pop(choice_index)
+                    print("Accept the friend request!")
+                    np.save("friend_request.npy", pending_requests)
                     
                 elif action == "R":
                     # Simply remove the request from the list to "reject" it
-                    del pending_requests[choice_index]
+                    #del pending_requests[choice_index]
+                    pending_requests[username].pop(choice_index)
                     print("Friend request rejected.")
                     # Save the updated list of pending requests back to the file
-                    np.save(f"{username}_friend_requests.npy", np.array(pending_requests, dtype=object))
+                    np.save("friend_request.npy", pending_requests)
                 else:
                     print("Invalid choice. Please enter 'A' to accept or 'R' to reject.")
             else:
