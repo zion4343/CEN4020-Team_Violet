@@ -679,7 +679,16 @@ def getLoggedInUserFullName():
 #The function to check pending friend request
 def checkPendingFriendRequest(username):
   loadFriendRequest()
-  NoPendingRequest = len(pending_requests[username])
+  
+  #Checks if username is present in friends_request.npy
+  for all in pending_requests.keys():
+    if username != pending_requests.keys():
+      return
+        
+
+  ##FIXED the issue below using the above for statement
+  NoPendingRequest = len(pending_requests[username]) ##Causes an error(KeyError: 'odanobu' for example) when user has no pending friend request (ie, username not present in numpy file)
+
   # Check if there are pending requests
   if (NoPendingRequest) > 0:
     print("You have pending friend request!")

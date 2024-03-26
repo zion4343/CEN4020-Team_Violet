@@ -15,7 +15,7 @@ MAX_ACCOUNTS = 10
 MIN_PASSWORD_LENGTH = 8
 MAX_PASSWORD_LENGTH = 12
 
-#The dictionary that store 5 unique student accounts
+#The dictionary that store 10 unique student accounts
 #Name: Password
 accounts = {}
 accFullName = {}
