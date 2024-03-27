@@ -17,13 +17,7 @@ Functions
 
 
 #This function to gives additional options after login is successful
-def addOptions(username):  
-
-  checkUnreadMessages(username)
-
-
-
-
+def addOptions(username):
   print("\n")
   print("Welcome! What would you like to do?")
   print("\n")
@@ -1155,16 +1149,3 @@ def getUserAppliedJobs(username):
 
 def saveJobPostings(jobPostings):
    np.save("job_postings.npy", jobPostings)
-
-
-#Function that checks for unread messages and display notifications
-def checkUnreadMessages(username):
-    try:
-        inbox = np.load(f"{username}_inbox.npy", allow_pickle=True).item()
-    except FileNotFoundError:
-        inbox = {}
-
-    unread_messages = sum(len(messages) for messages in inbox.values() if messages)
-
-    if unread_messages > 0:
-        print(f"You have {unread_messages} unread messages. Please check your inbox.")
