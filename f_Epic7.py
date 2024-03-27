@@ -339,6 +339,9 @@ def deleteMessage(username):
                 selection = int(selection)
                 if 0 < selection <= len(messages):
                     del inbox[sender][selection - 1]
+                    
+                    #Updates the user's inbox
+                    np.save(f"{username}_inbox.npy", inbox)
                     print("Message deleted successfully.")
 
                 elif selection == 0:
