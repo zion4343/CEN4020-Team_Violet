@@ -170,11 +170,8 @@ def sendMessage(username):
     friends_list = accounts[username].get('friends', []) #SHOWS LIST OF FRIENDS
     friends_listTemp = list(inboxTemp.values()) #SHOWS LIST OF FRIENDS
 
-    print("The TEMP names are: ", friends_listTemp)
-
+   
     
-    
-
     # #Checks to makes sure friend is in list
     # if not friends_list: #If the user has no friends yet
     #     print("You don't have any friends yet.")
@@ -186,7 +183,6 @@ def sendMessage(username):
         
         #Checks if user pick is a friend
         if friendPick == friend_username:
-            #global flag
             flagAssign(1)
             #flag = 1 #Verifys that user's pick is a friend
 
@@ -197,7 +193,6 @@ def sendMessage(username):
     #Runs through the temp list of names for recipent
     for i in friends_listTemp:
         for j in i:
-            print("The temp names are: ", j)
             if friendPick == j:
                 #flag = 2
                 flag = flagAssign(2)
