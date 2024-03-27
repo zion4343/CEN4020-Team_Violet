@@ -36,6 +36,9 @@ def flagAssign(num):
     global flag
     flag = num
 
+    return flag
+
+
 
 
 def manageMessage(username):
@@ -67,6 +70,10 @@ def manageMessage(username):
     #User deletes their inbox
     elif messageChoice == 3:
         deleteMessage(username)
+
+    else:
+        print("That was an invalid selection.")
+
     return
 
 
@@ -146,7 +153,7 @@ def sendMessage(username):
     except FileNotFoundError:
         print("Accounts file not found. Make sure you have run the account creation process.")
         return
-    
+       
     
 
     #Asks the user to select a friend to send a message to
@@ -155,13 +162,15 @@ def sendMessage(username):
 
     #Loads (or creates) a temp inbox dictionary
     try:
-        inboxTemp = np.load(f"{friendPick}_temp_inbox.npy", allow_pickle=True).item()
+        inboxTemp = np.load(f"{username}_temp_inbox.npy", allow_pickle=True).item()
 
     except FileNotFoundError:
         inboxTemp = {}
 
     friends_list = accounts[username].get('friends', []) #SHOWS LIST OF FRIENDS
     friends_listTemp = list(inboxTemp.values()) #SHOWS LIST OF FRIENDS
+
+    print("The TEMP names are: ", friends_listTemp)
 
     
     
@@ -177,6 +186,7 @@ def sendMessage(username):
         
         #Checks if user pick is a friend
         if friendPick == friend_username:
+            #global flag
             flagAssign(1)
             #flag = 1 #Verifys that user's pick is a friend
 
@@ -186,16 +196,17 @@ def sendMessage(username):
 
     #Runs through the temp list of names for recipent
     for i in friends_listTemp:
-        print(i)
-        if friendPick == i:
-            #flag = 2
-            flagAssign(2)
+        for j in i:
+            print("The temp names are: ", j)
+            if friendPick == j:
+                #flag = 2
+                flag = flagAssign(2)
 
     if flag == 2:
         message = input("Enter your message: ") #Asks user to submit their message
 
         #Saves the message in recipient's inbox
-        saveMessage(recipient_username, username, message, 0)
+        saveMessage(friendPick, username, message, 0)
         print("Message sent successfully.")
         return
 
@@ -311,7 +322,7 @@ def viewInbox(username):
 
     if inbox:
         print("Your Inbox:")
-        for sender, messages in inbox.items():
+        for sender, messages in inbox.item():
             print(f"From: {sender}")
             for message in messages:
                 print(f"- {message}")
@@ -328,7 +339,7 @@ def deleteMessage(username):
 
     if inbox:
         print("Your Inbox:")
-        for sender, messages in inbox.items():
+        for sender, messages in inbox.item():
             print(f"From: {sender}")
             for index, message in enumerate(messages, start=1):
                 print(f"{index}. {message}")
@@ -339,7 +350,7 @@ def deleteMessage(username):
                 selection = int(selection)
                 if 0 < selection <= len(messages):
                     del inbox[sender][selection - 1]
-                    
+
                     #Updates the user's inbox
                     np.save(f"{username}_inbox.npy", inbox)
                     print("Message deleted successfully.")
