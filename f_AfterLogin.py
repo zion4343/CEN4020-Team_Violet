@@ -15,25 +15,20 @@ import f_Epic7 as epic7
 Functions
 '''
 
-#Checks if user is a an InPlus or Standard user
-isPlus = False
-
-def checkUserPlan(username):
-   #Check if the logged-in user is a "plus" user
-    if username in accounts and 'plus' in accounts[username] and accounts[username]['plus'] == '1':
-        isPlus = True
-
-    else: #User is on the standard plan
-        isPlus = False
 
 #This function to gives additional options after login is successful
 def addOptions(username):  
+  print("--------------------------------------------------")
+  print("                 Notifications                    ")
+  print("--------------------------------------------------")
 
   checkUnreadMessages(username)
+  print("\n")
 
 
-
-
+  print("-------------------------------------------------")
+  print("                     Menu                        ")
+  print("--------------------------------------------------")
   print("\n")
   print("Welcome! What would you like to do?")
   print("\n")
