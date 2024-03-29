@@ -266,28 +266,28 @@ def userImportantExit(userChoice):
 #Names the files to be printed according to user selection
 def returnFilename(number):
     if number == 1:
-        file = "Copyright_Notice.txt"
+        file = "TextFiles/Copyright_Notice.txt"
     
     elif number == 2:
-        file = "About.txt"
+        file = "TextFiles/About.txt"
 
     elif number == 3:
-        file = "About.txt"
+        file = "TextFiles/About.txt"
 
     elif number == 4:
-        file = "User_Agreement.txt"
+        file = "TextFiles/User_Agreement.txt"
 
     elif number == 5:
-        file = "Privacy_Policy.txt"
+        file = "TextFiles/Privacy_Policy.txt"
 
     elif number == 6:
-        file = "Cookie_Policy.txt"
+        file = "TextFiles/Cookie_Policy.txt"
     
     elif number == 7:
-        file = "Copyright_Policy.txt"
+        file = "TextFiles/Copyright_Policy.txt"
 
     elif number == 8:
-        file = "Brand_Policy.txt"
+        file = "TextFiles/Brand_Policy.txt"
 
     return file
 
