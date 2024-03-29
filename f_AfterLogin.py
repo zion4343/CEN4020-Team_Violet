@@ -9,6 +9,7 @@ import f_BeforeLogin as b_login
 from f_BeforeLogin import accounts
 import f_Epic6 as epic6
 import f_Epic7 as epic7
+import f_Epic8 as epic8
 
 
 '''
@@ -17,14 +18,20 @@ Functions
 
 
 #This function to gives additional options after login is successful
-def addOptions(username):  
+def addOptions(username):    
   print("--------------------------------------------------")
   print("                 Notifications                    ")
   print("--------------------------------------------------")
 
+  #Check for Unread Messages
   checkUnreadMessages(username)
+  #Check for the pending friend request
+  checkPendingFriendRequest(username)
+  #Check for deleted jobs user applied for
+  checkDeletedJobs(username)
+  #Check the lastApplyTime and send nofitication if the user does not apply to jobs over 7 days
+  epic8.recommendApplyJob(username)
   print("\n")
-
 
   print("-------------------------------------------------")
   print("                     Menu                        ")
@@ -42,10 +49,6 @@ def addOptions(username):
   print("8. Manage Messages")
   print("\n")
   
-  #Check for the pending friend request
-  checkPendingFriendRequest(username)
-  #Check for deleted jobs user applied for
-  checkDeletedJobs(username)
   
   choice = input("Enter your choice: ")
 

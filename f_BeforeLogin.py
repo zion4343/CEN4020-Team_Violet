@@ -7,6 +7,7 @@ Import
 '''
 import numpy as np
 import os
+from datetime import datetime
 
 '''
 Pre-difined Variables
@@ -144,7 +145,8 @@ def CreateNewAccount():
                         'last_name': lastName,
                         'full_name': fullname,
                         'friends': [],
-                        'plus': plus
+                        'plus': plus,
+                        'lastApplyTime': datetime.now()
                     }
                     accFullName[fullname] = username
                     print("Your account was created successfully!")

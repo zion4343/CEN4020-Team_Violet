@@ -5,6 +5,7 @@ The functions developed in Epic 6
 Import
 '''
 import numpy as np
+import f_Epic8 as epic8
 
 '''
 Functions
@@ -36,6 +37,7 @@ def applyForJob(username, jobPostings, jobNumber):
   np.save("job_postings.npy", jobPostings)
 
   print("You applied for the job successfully")
+  epic8.updateApplyTime(username)
   return 1
 
 
