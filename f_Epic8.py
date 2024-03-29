@@ -11,6 +11,7 @@ from datetime import datetime
 '''
 Functions
 '''
+#The function to update lastApplyTime
 def updateApplyTime(username):
     #read accounts
     py_dict = np.load("accounts.npy", allow_pickle = "TRUE")
@@ -24,6 +25,7 @@ def updateApplyTime(username):
     
     return 1
 
+#The function to send notification if the user does not apply to a job over 7 days
 def recommendApplyJob(username):
     #read accounts
     py_dict = np.load("accounts.npy", allow_pickle = "TRUE")
@@ -39,6 +41,19 @@ def recommendApplyJob(username):
     #if the difference is over 7 days(7 * 24 * 60 * 60), print the notification
     if(current_float - last_float > 604800):
         print("Remember - you're going to want to have a job when you graduate. Make sure that you start to apply for jobs today!")
+    
+    return 1
+
+#The function that recommend users to set profile if the user have not set the profile
+def recommendSettingProfile(username):
+    #Read profile
+    try:
+        # Load existing profile if it exists
+        profile = np.load(f"profileFiles/{username}_profile.npy", allow_pickle=True).item()
+        
+    except FileNotFoundError:
+        print("You did not set your profile. Don't forget to create a profile!")
+        return 0
     
     return 1
     

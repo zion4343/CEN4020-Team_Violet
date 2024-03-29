@@ -29,8 +29,11 @@ def addOptions(username):
   checkPendingFriendRequest(username)
   #Check for deleted jobs user applied for
   checkDeletedJobs(username)
-  #Check the lastApplyTime and send nofitication if the user does not apply to jobs over 7 days
+  #Check the lastApplyTime and send notification if the user does not apply to jobs over 7 days
   epic8.recommendApplyJob(username)
+  #Check the user profile and send notification if the user have not set the profile
+  epic8.recommendSettingProfile(username)
+  
   print("\n")
 
   print("-------------------------------------------------")
@@ -768,8 +771,10 @@ def manageFriendRequests(username):
     loadFriendRequest()
     
     senderUsername = []
-    
-    NoPendingRequest = len(pending_requests[username])
+    try:
+      NoPendingRequest = len(pending_requests[username])
+    except KeyError:
+      NoPendingRequest = 0
     # Check if there are pending requests
     if (NoPendingRequest) > 0:
         print("Pending Friend Requests:")
@@ -900,7 +905,7 @@ def findUsersByLastName(last_name):
 def createProfile(username):
   try:
     # Load existing profile if it exists
-    profile = np.load(f"{username}_profile.npy", allow_pickle=True).item()
+    profile = np.load(f"profileFiles/{username}_profile.npy", allow_pickle=True).item()
     print("Existing Profile Found. You can update it.")
   except FileNotFoundError:
     # If profile doesn't exist, create a new one
@@ -957,7 +962,7 @@ def createProfile(username):
       print("Invalid choice.")
 
   # Save profile
-  np.save(f"{username}_profile.npy", np.array(profile))
+  np.save(f"profileFiles/{username}_profile.npy", np.array(profile))
   print("Profile updated successfully.")
 
 
