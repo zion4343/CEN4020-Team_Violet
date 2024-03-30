@@ -56,6 +56,61 @@ def recommendSettingProfile(username):
         return 0
     
     return 1
+
+#The function to store NewUser for notification to existing user
+def newUser(username):
+    #read accounts
+    try:
+        py_dict = np.load("accounts.npy", allow_pickle = "TRUE")
+        accounts = py_dict.item()
+    except:
+        accounts = {}
     
+    #read newUsers
+    try:
+        py_dict = np.load("newUsers.npy", allow_pickle = "TRUE")
+        newUsers = py_dict.item()
+        
+    except FileNotFoundError:
+        newUsers = {}
+        
+    #Set the newUsers to notify the new Users to existing users
+    for account in accounts.keys():
+        try:
+            newUsers[account].append({username: "NotAnnounced"})
+        except KeyError:
+            newUsers[account] = {username: "NotAnnounced"}
+        
+    #save newUsers
+    np.save("newUsers.npy", newUsers)
     
+    return 1 
+
+def newUserNotification(username):
+    #read newUsers
+    try:
+        py_dict = np.load("newUsers.npy", allow_pickle = "TRUE")
+        newUsers = py_dict.item()
+        
+    except FileNotFoundError:
+        return 0
     
+    #read accounts
+    try:
+        py_dict = np.load("accounts.npy", allow_pickle = "TRUE")
+        accounts = py_dict.item()
+        
+    except FileNotFoundError:
+        return 0
+    
+    #Announce New Users
+    for newUser in newUsers[username].keys():
+        print(accounts[newUser]["last_name"] + " " + accounts[newUser]["first_name"] + " has joined InCollege!")
+        
+    #Delete announced NewUsers
+    newUsers[username].clear()
+        
+    #save newUsers
+    np.save("newUsers.npy", newUsers)
+    
+    return 1   

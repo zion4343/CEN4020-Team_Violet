@@ -33,6 +33,8 @@ def addOptions(username):
   epic8.recommendApplyJob(username)
   #Check the user profile and send notification if the user have not set the profile
   epic8.recommendSettingProfile(username)
+  #Check the new Users
+  epic8.newUserNotification(username)
   
   print("\n")
 

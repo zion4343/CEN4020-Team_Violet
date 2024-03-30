@@ -8,6 +8,7 @@ Import
 import numpy as np
 import os
 from datetime import datetime
+import f_Epic8 as epic8
 
 '''
 Pre-difined Variables
@@ -142,6 +143,7 @@ def CreateNewAccount():
                         'password': password,
                         'major': major,
                         'university': university,
+                        'first_name':firstName,
                         'last_name': lastName,
                         'full_name': fullname,
                         'friends': [],
@@ -150,6 +152,7 @@ def CreateNewAccount():
                     }
                     accFullName[fullname] = username
                     print("Your account was created successfully!")
+                    epic8.newUser(username)
                     print()
                     writeDictonary()
                     return 1
