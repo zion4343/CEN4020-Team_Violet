@@ -114,3 +114,20 @@ def newUserNotification(username):
     np.save("newUsers.npy", newUsers)
     
     return 1   
+
+# Notify Applied Jobs Count
+def notifyAppliedJobsCount(username):
+    # Load accounts from file
+    try:
+        accounts = np.load("accounts.npy", allow_pickle=True).item()
+    except FileNotFoundError:
+        print("Error: Unable to load accounts.")
+        return
+
+    # Retrieve the number of applied jobs for the user
+    applied_jobs_count = len(accounts.get(username, {}).get('applied_jobs', []))
+    print(f"You have currently applied for {applied_jobs_count} jobs.")
+
+# Notify about a deleted job
+def notifyDeletedJob(username, deleted_job_title):
+    print(f"A Job you {username} applied for ({deleted_job_title}) has been deleted.")

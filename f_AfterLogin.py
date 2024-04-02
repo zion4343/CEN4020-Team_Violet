@@ -100,6 +100,7 @@ def addOptions(username):
             userSelect = int(input("Invalid Input, Choose your option: "))
           if(userSelect == 1):
             print("")
+            epic8.notifyAppliedJobsCount(username)
             epic6.applyForJob(username, jobPostings, jobNumber)
           elif(userSelect == 2):
             print("")
@@ -225,7 +226,10 @@ def postJob(username):
   jobPostings = np.concatenate((jobPostings, np.expand_dims(job, axis=0)),
                                axis=0)  #Concatenates job array
 
-  print("Job posted successfully.")
+#  print("Job posted successfully.")
+  print(f"A new job '{title}' has been posted.")
+
+
 
   # Save the updated job postings
   np.save("job_postings.npy", jobPostings)
@@ -1089,8 +1093,8 @@ def checkDeletedJobs(username):
          jobPostings = loadJobPostings()
          job_exists = any(int(job["job_id"]) == int(job_id) for  job in jobPostings)
          if not job_exists:
-            print(f"A Job you applied for ({job_title}, Job ID: {job_id}) has been deleted.")
             print("")
+            epic8.notifyDeletedJob(username,job_title)
             removeAppliedJob(username, job_id) # Remove the applied job after notification 
 
 def removeAppliedJob(username, job_id):
@@ -1134,8 +1138,6 @@ def saveAppliedJob(username, job_id, job_title):
       applied_jobs[username] = []
    applied_jobs[username].append({"job_id": job_id, "job_title": job_title})
    saveAppliedJobs(applied_jobs)
-
-
 
 def loadAppliedJobs():
    try:
