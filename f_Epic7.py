@@ -1,18 +1,15 @@
 '''
-The functions developed in Epic 7
+The functions developed in Epic 6
 '''
 
 '''
 Import
 '''
 import numpy as np
-from f_BeforeLogin import accounts
-import f_AfterLogin as AL
 
 '''
 Functions
 '''
-
 
 #Checks if user is a an Plus or Standard user
 isPlus = False
@@ -44,12 +41,13 @@ def flagAssign(num):
 
 
 
-
-# Function to manage messages
 def manageMessage(username):
-    print("Select an option:")
-    print("1. Send a message")
+    #Checks whether user is an Plus user or just Standard
+    global isPlus
+    isPlus = checkUserPlan(username)
 
+    #Displays a menu option for users
+    print("1. Send a message")
     print("2. View your messages")
     print("3. Delete Message from Inbox \n")
 
@@ -82,26 +80,68 @@ def manageMessage(username):
 
 #Function that enables a message to be sent to a friend for plus users
 def sendMessagePlus(username):
+    
+    
+    #Loads the accounts dictionary and checks for error
+    try:
+        accounts = np.load("accounts.npy", allow_pickle=True).item()
 
-    print("2. Check inbox")
+    except FileNotFoundError:
+        print("Accounts file not found. Make sure you have run the account creation process.")
+        return
+
+    #Asks the user to select a friend to send a message to
+    friends_list = list(accounts.keys()) #SHOWS LIST OF ALL USERS
+
     
-    message_choice = input("Enter your choice: ")
+
+    #Displays the all the friends in the friends list
+    print("Here is a list of all users")
+    print("-----------------------------------------")
+    for index, friend_username in enumerate(friends_list, start=1):
+        friend_full_name = accounts[friend_username].get('full_name', 'No name available')
+
+        #Skips printing user's own name
+        if username == friend_username:
+            continue
+
+        else:
+            print(f"{index}. {friend_full_name} ({friend_username})") 
     
-    if message_choice == "1":
-        sendMessage(username)
-    elif message_choice == "2":
-        checkInbox(username)
+    
+    #Asks the user to select a person from the list
+    selection = input("\nEnter the number of the person you want to send a message to: ")
+
+    if selection.isdigit():
+        selection = int(selection)
+        if 1 <= selection <= len(friends_list):
+            recipient_username = friends_list[selection - 1]
+            message = input("Enter your message: ") #Asks user to submit their message
+
+            #Saves the message in recipient's inbox
+            saveMessage(recipient_username, username, message, 1)
+            print("Message sent successfully.")
+
+
+        else:
+            print("Invalid selection.")
+
     else:
-        print("Invalid choice.")
+        print("Invalid input.")
 
-# Function to send a message
-def sendMessage(sender_username):
-    AL.displayFriendsList(sender_username)
-    receiver_username = input("Enter the username of the receiver: ")
+
+#Function that enables a message to be sent to a friend
+def sendMessage(username):
     
-    # Check if receiver exists
-    if receiver_username not in accounts:
-        print("User not found.")
+    #Turns to 1 when the person user chose is in the friends' list
+    flag = 0
+
+    #Loads the accounts dictionary and checks for error
+    try:
+        accounts = np.load("accounts.npy", allow_pickle=True).item()
+
+    except FileNotFoundError:
+        print("Accounts file not found. Make sure you have run the account creation process.")
         return
        
     
@@ -167,29 +207,69 @@ def sendMessage(sender_username):
         for index, friend_username in enumerate(friends_list, start=1):
             friend_full_name = accounts[friend_username].get('full_name', 'No name available')      
             print(f"{index}. {friend_full_name} ({friend_username})") 
+    
+        #Asks the user to select a friend from the list
+        selection = input("Enter the number of the friend you want to send a message to: ")
 
-    
-    # Check if sender and receiver are friends
-    if receiver_username not in accounts[sender_username]["friends"]:
-        print("I'm sorry, You are not friends with this person.")
-        return
-    
-    message_content = input("Enter your message: ")
-    
-    # Save the message to the receiver's inbox
-    saveMessage(receiver_username, sender_username, message_content)
-    
-    print("Message sent successfully.")
+    if selection.isdigit():
+        selection = int(selection)
+        if 1 <= selection <= len(friends_list):
+            recipient_username = friends_list[selection - 1]
+            message = input("Enter your message: ") #Asks user to submit their message
 
-# Function to save a message to the receiver's inbox
-def saveMessage(receiver_username, sender_username, message_content):
+            #Checks if recipient is a friend
+            if recipient_username in friends_list:
+
+                #Saves the message in recipient's inbox
+                saveMessage(recipient_username, username, message, 0)
+                print("Message sent successfully.")
+
+            else:
+                print("I'm sorry, you are not friends with that person.")
+
+        else:
+            print("Invalid selection.")
+
+    else:
+        print("Invalid input.")
+
+
+
+#Function to save a message in the recipient's inbox (used in sendMessage function)
+def saveMessage(recipient_username, sender_username, message, plusNum):
+     #Loads the accounts dictionary and checks for error
     try:
-        inbox = np.load(f"{receiver_username}_inbox.npy", allow_pickle=True).item()
+        accounts = np.load("accounts.npy", allow_pickle=True).item()
+
+    except FileNotFoundError:
+        print("Accounts file not found. Make sure you have run the account creation process.")
+        return
+
+    #Loads (or creates) an inbox dictionary just for each recipients inbox
+    try:
+        inbox = np.load(f"{recipient_username}_inbox.npy", allow_pickle=True).item()
+
     except FileNotFoundError:
         inbox = {}
-        
+
+    #Creates an list inside the recipient inbox to store messages from that sender if it doesn't already exist
     if sender_username not in inbox:
         inbox[sender_username] = []
+
+    #Adds the message to the list
+    inbox[sender_username].append(message)
+
+    #Stores list in a dictionary in a numpy file
+    np.save(f"{recipient_username}_inbox.npy", inbox)
+
+    #Checks what user type sent this message (plus = 1, standard = 0)
+    userType = plusNum
+    flag = 0
+
+    #Puts plus user on a temp list so person they sent a message to can respond to them
+    friendsRecList = accounts[recipient_username].get('friends', []) #SHOWS LIST OF FRIENDS
+    for index, friend_username in enumerate(friendsRecList, start=1):
+        friend_full_name = accounts[friend_username].get('full_name', 'No name available')
         
         #Checks if user pick is a friend
         if sender_username == friend_username:
@@ -234,14 +314,11 @@ def viewInbox(username):
     else:
         print("Your inbox is empty.")
 
-    inbox[sender_username].append(message_content)
-    
-    np.save(f"{receiver_username}_inbox.npy", inbox)
 
-# Function to check the inbox
-def checkInbox(username):
+#Function to delete a message from the user's inbox
+def deleteMessage(username):
     try:
-        inbox = np.load(f"{username}_inbox.npy", allow_pickle=True).items()
+        inbox = np.load(f"{username}_inbox.npy", allow_pickle=True).item()
     except FileNotFoundError:
         inbox = {}
 
@@ -263,21 +340,16 @@ def checkInbox(username):
                     np.save(f"{username}_inbox.npy", inbox)
                     print("Message deleted successfully.")
 
-        print("No messages in your inbox.")
-        return
-    
-    if not inbox:
-        print("No messages in your inbox.")
-        return
-    
-    print("Messages in your inbox:")
-    for sender, messages in inbox.items():
-        print(f"From: {sender}")
-        for message in messages:
-            print(f"- {message}")
-            
-    # Clear the inbox after reading messages
-    clearInbox(username)
+                elif selection == 0:
+                    print("Operation cancelled.")
+                    
+                else:
+                    print("Invalid selection.")
+            else:
+                print("Invalid input.")
+    else:
+        print("Your inbox is empty.")
+
 
 # Function to clear the inbox after reading messages
 def clearInbox(username):
