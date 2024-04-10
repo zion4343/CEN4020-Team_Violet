@@ -52,6 +52,7 @@ def addOptions(username):
   print("6. Create your Personal Profile")
   print("7. Remove Job")
   print("8. Manage Messages")
+  print("9. Log out")
   print("\n")
   
   
@@ -187,6 +188,10 @@ def addOptions(username):
   elif choice == "8":
     epic7.manageMessage(username)
     addOptions(username)
+
+  #Essentially logs out
+  elif choice == "9":
+    exit()
     
   else:
     print("Invalid choice.")
