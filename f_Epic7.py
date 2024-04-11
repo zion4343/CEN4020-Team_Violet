@@ -324,7 +324,7 @@ def deleteMessage(username):
 
     if inbox:
         print("Your Inbox:")
-        for sender, messages in inbox.item():
+        for sender, messages in inbox.items():
             print(f"From: {sender}")
             for index, message in enumerate(messages, start=1):
                 print(f"{index}. {message}")
