@@ -77,7 +77,11 @@ def newUser(username):
     #Set the newUsers to notify the new Users to existing users
     for account in accounts.keys():
         try:
-            newUsers[account].append({username: "NotAnnounced"})
+            if len(newUsers[account]) != 0:
+                newUsers[account].append({username: "NotAnnounced"})
+            else:
+                newUsers[account] = {username: "NotAnnounced"}
+
         except KeyError:
             newUsers[account] = {username: "NotAnnounced"}
         
@@ -104,11 +108,11 @@ def newUserNotification(username):
         return 0
     
     #Announce New Users
-    for newUser in newUsers[username].keys():
-        print(accounts[newUser]["last_name"] + " " + accounts[newUser]["first_name"] + " has joined InCollege!")
+    for newUser in newUsers.keys():
+        print(accounts[newUser]["full_name"] + " has joined InCollege!")
         
     #Delete announced NewUsers
-    newUsers[username].clear()
+    newUsers.clear()
         
     #save newUsers
     np.save("newUsers.npy", newUsers)

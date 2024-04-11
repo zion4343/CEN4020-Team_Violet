@@ -307,7 +307,7 @@ def viewInbox(username):
 
     if inbox:
         print("Your Inbox:")
-        for sender, messages in inbox.item():
+        for sender, messages in inbox.items():
             print(f"From: {sender}")
             for message in messages:
                 print(f"- {message}")
